@@ -18,7 +18,13 @@ export default function TabLayout() {
           ),
         }}
       />
-      
-    </Tabs>
-  );
+     <Tabs.Screen
+       name= "FriendGroupsTabbed"
+       options={{
+         title: "Groups",
+       }}
+     />
+   </Tabs>
+ );
 }
+

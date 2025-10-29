@@ -244,9 +244,10 @@ export default function App() {
     setProfileImage(null);
     setCameFromSummary(false);
     
-    // Go to Home tab after finishing the quiz
-    router.replace("/(tabs)/home");
+    // go to FriendGroupsSimple page
+    router.replace("/FriendGroupsSimple");
   };
+
   const renderUserInfoForm = () => (
     <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
       <View style={{ paddingTop: 20 }}>
