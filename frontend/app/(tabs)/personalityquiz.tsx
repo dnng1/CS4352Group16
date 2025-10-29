@@ -28,52 +28,102 @@ const COLORS = {
 const personalityQuestions = [
   {
     id: 1,
-    title: "How do you prefer to spend your free time?",
+    title: "What do you look forward to most when moving somewhere new?",
     options: [
-      "Reading a book",
-      "Going to parties",
-      "Exercising outdoors",
-      "Playing video games",
+      "Trying new foods and traditions",
+      "Meeting new people",
+      "Exploring the city",
+      "Building a routine",
     ],
   },
   {
     id: 2,
-    title: "When making decisions, you tend to:",
+    title: "How do you spend your weekends?",
     options: [
-      "Analyze all options carefully",
-      "Go with your gut feeling",
-      "Ask others for advice",
-      "Research extensively first",
+      "Going out with friends",
+      "Relaxing at home",
+      "Exploring new places",
+      "Learning new skills",
     ],
   },
   {
     id: 3,
-    title: "In a group project, you usually:",
+    title: "What role do you play in friend groups?",
     options: [
-      "Take the lead",
-      "Support others' ideas",
-      "Focus on specific tasks",
-      "Coordinate everyone",
+      "The planner",
+      "The listener",
+      "The adventurer",
+      "The motivator",
     ],
   },
   {
     id: 4,
-    title: "Your ideal work environment is:",
+    title: "What helps you feel most connected to others?",
     options: [
-      "Quiet and private",
-      "Collaborative and open",
-      "Structured and organized",
-      "Creative and flexible",
+      "Deep conversations",
+      "Shared activities",
+      "Laughing together",
+      "Shared goals",
     ],
   },
   {
     id: 5,
-    title: "When facing a challenge, you:",
+    title: "How do you usually meet new people?",
     options: [
-      "Tackle it head-on",
-      "Break it into smaller parts",
-      "Seek help from others",
-      "Take time to think it through",
+      "School or work",
+      "Online communities",
+      "Social events",
+      "Through friends",
+    ],
+  },
+  {
+    id: 6,
+    title: "How comfortable are you with new cultures?",
+    options: [
+      "Love immersing myself",
+      "Curious but cautious",
+      "Learn some things",
+      "Prefer familiar places",
+    ],
+  },
+  {
+    id: 7,
+    title: "How do you handle challenges in a new country?",
+    options: [
+      "Ask others for help",
+      "Research on my own",
+      "Take breaks and adjust",
+      "Stay positive",
+    ],
+  },
+  {
+    id: 8,
+    title: "What social vibe do you prefer?",
+    options: [
+      "Small groups",
+      "Big gatherings",
+      "Chill hangouts",
+      "Activity based",
+    ],
+  },
+  {
+    id: 9,
+    title: "What's most important in friendship?",
+    options: [
+      "Loyalty and trust",
+      "Shared interests",
+      "Mutual growth",
+      "Emotional support",
+    ],
+  },
+  {
+    id: 10,
+    title: "What would your ideal friend group theme be?",
+    options: [
+      "Cultural Explorers",
+      "Deep Talks and Coffee",
+      "Adventure Squad",
+      "Study and Support Circle",
     ],
   },
 ];
@@ -89,6 +139,7 @@ export default function App() {
   });
   const [answers, setAnswers] = useState<{ [key: number]: string }>({});
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [cameFromSummary, setCameFromSummary] = useState(false);
 
   const question = personalityQuestions[currentQuestion];
   const totalQuestions = personalityQuestions.length;
@@ -102,11 +153,23 @@ export default function App() {
   };
 
   const handleQuizNext = () => {
-    if (selectedOption) {
-      setAnswers({ ...answers, [currentQuestion]: selectedOption });
-      if (currentQuestion + 1 < totalQuestions) {
-        setCurrentQuestion(currentQuestion + 1);
-        setSelectedOption(null);
+    // Require an answer before continuing
+    if (!selectedOption) {
+      Alert.alert("Select an answer", "Please choose an option to continue.");
+      return;
+    }
+
+    // Save current answer
+    setAnswers({ ...answers, [currentQuestion]: selectedOption });
+
+    if (currentQuestion + 1 < totalQuestions) {
+      setCurrentQuestion(currentQuestion + 1);
+      const nextQuestionAnswer = answers[currentQuestion + 1];
+      setSelectedOption(nextQuestionAnswer || null);
+    } else {
+      if (cameFromSummary) {
+        setCurrentStep(3);
+        setCameFromSummary(false);
       } else {
         setCurrentStep(2);
       }
@@ -122,7 +185,12 @@ export default function App() {
       const answerForPreviousQuestion = answers[currentQuestion - 1];
       setSelectedOption(answerForPreviousQuestion || null);
     } else {
-      setCurrentStep(0);
+      if (cameFromSummary) {
+        setCurrentStep(3);
+        setCameFromSummary(false);
+      } else {
+        setCurrentStep(0);
+      }
     }
   };
 
@@ -157,6 +225,13 @@ export default function App() {
     }
   };
 
+  const handleEditQuestion = (questionIndex: number) => {
+    setCurrentQuestion(questionIndex);
+    setCurrentStep(1);
+    setSelectedOption(answers[questionIndex] || null);
+    setCameFromSummary(true);
+  };
+
   const handleSubmit = () => {
     Alert.alert("Success!", "Your personality quiz has been submitted!");
     setCurrentStep(0);
@@ -165,10 +240,8 @@ export default function App() {
     setUserInfo({ fullName: "", phoneNumber: "", location: "" });
     setAnswers({});
     setProfileImage(null);
+    setCameFromSummary(false);
   };
-
-  // ============ SCREENS ============
-
   const renderUserInfoForm = () => (
     <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
       <View style={{ paddingTop: 20 }}>
@@ -180,7 +253,7 @@ export default function App() {
             textAlign: "center",
           }}
         >
-          Welcome! 👋
+          Welcome! 
         </Text>
         <Text
           style={{
@@ -362,7 +435,7 @@ export default function App() {
             textAlign: "center",
           }}
         >
-          Almost Done! 🎯
+          Almost Done! 
         </Text>
         <Text
           style={{
@@ -446,20 +519,30 @@ export default function App() {
             textAlign: "center",
           }}
         >
-          Your Information Summary 📋
+          Your Information Summary 
         </Text>
         <Text
           style={{
             fontSize: 16,
             color: COLORS.textSecondary,
             textAlign: "center",
-            marginBottom: 40,
+            marginBottom: 20,
           }}
         >
           Please review your information before submitting
         </Text>
+        <Text
+          style={{
+            fontSize: 14,
+            color: COLORS.primary,
+            textAlign: "center",
+            marginBottom: 40,
+            fontStyle: "italic",
+          }}
+        >
+          Tap on any question below to edit your answer
+        </Text>
 
-        {/* Personal Information */}
         <View
           style={{
             backgroundColor: COLORS.card,
@@ -504,7 +587,6 @@ export default function App() {
           </View>
         </View>
 
-        {/* Quiz Answers */}
         <View
           style={{
             backgroundColor: COLORS.card,
@@ -523,38 +605,61 @@ export default function App() {
           >
             Your Quiz Answers
           </Text>
-          {personalityQuestions.map((question, index) => (
-            <View key={question.id} style={{ marginBottom: 15 }}>
-              <Text
+          {personalityQuestions.map((question, index) => {
+            const isAnswered = answers[index];
+            return (
+              <TouchableOpacity
+                key={question.id}
+                onPress={() => handleEditQuestion(index)}
                 style={{
-                  fontSize: 14,
-                  color: COLORS.textSecondary,
-                  fontWeight: "500",
-                  marginBottom: 5,
+                  marginBottom: 15,
+                  padding: 12,
+                  borderRadius: 8,
+                  backgroundColor: isAnswered ? "#f0f8ff" : "#f8f9fa",
+                  borderWidth: 1,
+                  borderColor: isAnswered ? COLORS.primary : "#e9ecef",
                 }}
               >
-                Question {index + 1}:
-              </Text>
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: COLORS.textPrimary,
-                  marginBottom: 5,
-                }}
-              >
-                {question.title}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: COLORS.primary,
-                  fontWeight: "500",
-                }}
-              >
-                ✓ {answers[index] || "Not answered"}
-              </Text>
-            </View>
-          ))}
+                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                  <View style={{ flex: 1 }}>
+                    <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: COLORS.textSecondary,
+                          fontWeight: "500",
+                        }}
+                      >
+                        Question {index + 1}:
+                      </Text>
+                      {isAnswered && (
+                        <Ionicons name="checkmark-circle" size={16} color={COLORS.primary} style={{ marginLeft: 8 }} />
+                      )}
+                    </View>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: COLORS.textPrimary,
+                        marginBottom: 5,
+                      }}
+                    >
+                      {question.title}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: isAnswered ? COLORS.primary : COLORS.textSecondary,
+                        fontWeight: "500",
+                      }}
+                    >
+                      {isAnswered ? `✓ ${answers[index]}` : "Not answered - Tap to edit"}
+                    </Text>
+                  </View>
+                  <Ionicons name="create-outline" size={20} color={COLORS.primary} />
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         <TouchableOpacity
