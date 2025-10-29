@@ -244,8 +244,8 @@ export default function App() {
     setProfileImage(null);
     setCameFromSummary(false);
     
-    // Go to Home tab after finishing the quiz
-    router.replace("/(tabs)/home");
+    // Go to quiz completion recommendations screen
+    router.replace("/quizcompleted");
   };
   const renderUserInfoForm = () => (
     <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>

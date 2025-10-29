@@ -56,7 +56,7 @@ export default function Dashboard() {
       <View style={[styles.card, { flexDirection: "row", alignItems: "center", justifyContent: "space-between", height: 100}]}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/512/25/25437.png"}} style={styles.profileImage}></Image>
         <View style={{ flexDirection: "column", marginLeft: 15}}>
-          <Text style={styles.groupName}>Friend Group 3</Text>
+          <Text style={styles.groupName}>Friend Group 1</Text>
           <View style={{ flexDirection: "row"}}>
             <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/14026/14026550.png"}} style={styles.online}></Image>
           <Text> 3 online </Text>
@@ -68,7 +68,7 @@ export default function Dashboard() {
       <View style={[styles.card, { flexDirection: "row", alignItems: "center", justifyContent: "space-between", height: 100}]}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/512/25/25437.png"}} style={styles.profileImage}></Image>
         <View style={{ flexDirection: "column", marginLeft: 15}}>
-          <Text style={styles.groupName}>Friend Group 5</Text>
+          <Text style={styles.groupName}>Friend Group 3</Text>
           <View style={{ flexDirection: "row"}}>
             <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/14026/14026550.png"}} style={styles.online}></Image>
           <Text> 6 online </Text>

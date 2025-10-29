@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   overlay: { flex: 1, paddingHorizontal: 24, paddingTop: 80, paddingBottom: 40, justifyContent: "space-between" },
   headerArea: { alignItems: "center" },
   title: { fontSize: 48, fontWeight: "800", color: COLORS.border, letterSpacing: 1 },
-  subtitle: { marginTop: 8, fontSize: 16, color: COLORS.textPrimary, textAlign: "center" },
+  subtitle: { marginTop: 8, fontSize: 20, color: COLORS.textPrimary, textAlign: "center" },
   footerArea: { },
   primaryButton: { backgroundColor: COLORS.primary, paddingVertical: 16, borderRadius: 12, alignItems: "center" },
   primaryButtonText: { color: COLORS.textPrimary, fontSize: 18, fontWeight: "700" },
