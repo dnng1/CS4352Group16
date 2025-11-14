@@ -140,6 +140,14 @@ export default function App() {
     location: "",
   });
   const [answers, setAnswers] = useState<{ [key: number]: string }>({});
+  const [cultureInfo, setCultureInfo] = useState({
+    homeCountry: "",
+    languages: "",
+    timeInCountry: "",
+    reasonForComing: "",
+    supportLookingFor: [] as string[],
+    importantTraditions: "",
+  });
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [cameFromSummary, setCameFromSummary] = useState(false);
 
@@ -155,13 +163,11 @@ export default function App() {
   };
 
   const handleQuizNext = () => {
-    // Require an answer before continuing
     if (!selectedOption) {
       Alert.alert("Select an answer", "Please choose an option to continue.");
       return;
     }
 
-    // Save current answer
     setAnswers({ ...answers, [currentQuestion]: selectedOption });
 
     if (currentQuestion + 1 < totalQuestions) {
@@ -170,7 +176,7 @@ export default function App() {
       setSelectedOption(nextQuestionAnswer || null);
     } else {
       if (cameFromSummary) {
-        setCurrentStep(3);
+        setCurrentStep(4);
         setCameFromSummary(false);
       } else {
         setCurrentStep(2);
@@ -188,7 +194,7 @@ export default function App() {
       setSelectedOption(answerForPreviousQuestion || null);
     } else {
       if (cameFromSummary) {
-        setCurrentStep(3);
+        setCurrentStep(4);
         setCameFromSummary(false);
       } else {
         setCurrentStep(0);
@@ -203,6 +209,17 @@ export default function App() {
       setCurrentStep(1);
     } else if (currentStep === 3) {
       setCurrentStep(2);
+    } else if (currentStep === 4) {
+      setCurrentStep(3);
+    }
+  };
+
+  const handleCultureNext = () => {
+    if (cultureInfo.homeCountry && cultureInfo.languages && cultureInfo.timeInCountry && 
+        cultureInfo.reasonForComing && cultureInfo.supportLookingFor.length > 0 && cultureInfo.importantTraditions) {
+      setCurrentStep(3);
+    } else {
+      Alert.alert("Missing Information", "Please fill in all fields");
     }
   };
 
@@ -221,7 +238,7 @@ export default function App() {
 
   const handleImageNext = () => {
     if (profileImage) {
-      setCurrentStep(3);
+      setCurrentStep(4);
     } else {
       Alert.alert("Missing Image", "Please upload a profile image first");
     }
@@ -241,10 +258,17 @@ export default function App() {
     setSelectedOption(null);
     setUserInfo({ fullName: "", phoneNumber: "", location: "" });
     setAnswers({});
+    setCultureInfo({
+      homeCountry: "",
+      languages: "",
+      timeInCountry: "",
+      reasonForComing: "",
+      supportLookingFor: [],
+      importantTraditions: "",
+    });
     setProfileImage(null);
     setCameFromSummary(false);
     
-    // Go to quiz completion recommendations screen
     router.replace("/quizcompleted");
   };
   const renderUserInfoForm = () => (
@@ -428,6 +452,272 @@ export default function App() {
       </View>
     </ScrollView>
   );
+
+  const renderCultureAndBackground = () => {
+    const timeOptions = ["Just arrived", "<1 year", "1-3 years", "3-5 years", "5+ years"];
+    const supportOptions = ["Meeting people from home", "Learning local language", "Finding friends", "Cultural events"];
+
+    return (
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+        <View style={{ paddingTop: 20 }}>
+          <Text
+            style={{
+              fontSize: 28,
+              fontWeight: "700",
+              color: COLORS.textPrimary,
+              textAlign: "center",
+              marginBottom: 10,
+            }}
+          >
+            Culture and Background
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              color: COLORS.textSecondary,
+              textAlign: "center",
+              marginBottom: 40,
+            }}
+          >
+            Tell us about your cultural background
+          </Text>
+
+          <View style={{ marginBottom: 20 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "600",
+                color: COLORS.textPrimary,
+                marginBottom: 8,
+              }}
+            >
+              What is your home country?
+            </Text>
+            <TextInput
+              style={{
+                borderWidth: 1,
+                borderColor: COLORS.border,
+                backgroundColor: "#fff",
+                padding: 15,
+                borderRadius: 12,
+                fontSize: 16,
+              }}
+              placeholder="Enter your home country"
+              value={cultureInfo.homeCountry}
+              onChangeText={(text) =>
+                setCultureInfo({ ...cultureInfo, homeCountry: text })
+              }
+            />
+          </View>
+
+          <View style={{ marginBottom: 20 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "600",
+                color: COLORS.textPrimary,
+                marginBottom: 8,
+              }}
+            >
+              What languages can you speak?
+            </Text>
+            <TextInput
+              style={{
+                borderWidth: 1,
+                borderColor: COLORS.border,
+                backgroundColor: "#fff",
+                padding: 15,
+                borderRadius: 12,
+                fontSize: 16,
+              }}
+              placeholder="e.g., English, Spanish, French"
+              value={cultureInfo.languages}
+              onChangeText={(text) =>
+                setCultureInfo({ ...cultureInfo, languages: text })
+              }
+            />
+          </View>
+
+          <View style={{ marginBottom: 20 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "600",
+                color: COLORS.textPrimary,
+                marginBottom: 8,
+              }}
+            >
+              How long have you lived in your current country?
+            </Text>
+            {timeOptions.map((option) => {
+              const selected = cultureInfo.timeInCountry === option;
+              return (
+                <TouchableOpacity
+                  key={option}
+                  onPress={() =>
+                    setCultureInfo({ ...cultureInfo, timeInCountry: option })
+                  }
+                  style={{
+                    borderWidth: 1.5,
+                    borderColor: selected ? COLORS.border : "#ddd",
+                    backgroundColor: selected ? COLORS.card : "#fff",
+                    padding: 18,
+                    borderRadius: 12,
+                    marginBottom: 12,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={{ fontSize: 16, color: COLORS.textPrimary }}>
+                    {option}
+                  </Text>
+                  {selected && (
+                    <Ionicons name="checkmark-circle" size={22} color={COLORS.primary} />
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          <View style={{ marginBottom: 20 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "600",
+                color: COLORS.textPrimary,
+                marginBottom: 8,
+              }}
+            >
+              What is your reason for coming here?
+            </Text>
+            <TextInput
+              style={{
+                borderWidth: 1,
+                borderColor: COLORS.border,
+                backgroundColor: "#fff",
+                padding: 15,
+                borderRadius: 12,
+                fontSize: 16,
+                minHeight: 80,
+                textAlignVertical: "top",
+              }}
+              placeholder="Tell us why you came to this country"
+              value={cultureInfo.reasonForComing}
+              onChangeText={(text) =>
+                setCultureInfo({ ...cultureInfo, reasonForComing: text })
+              }
+              multiline
+            />
+          </View>
+
+          <View style={{ marginBottom: 20 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "600",
+                color: COLORS.textPrimary,
+                marginBottom: 8,
+              }}
+            >
+              What kind of support are you looking for? (Select all that apply)
+            </Text>
+            {supportOptions.map((option) => {
+              const selected = cultureInfo.supportLookingFor.includes(option);
+              return (
+                <TouchableOpacity
+                  key={option}
+                  onPress={() => {
+                    if (selected) {
+                      setCultureInfo({
+                        ...cultureInfo,
+                        supportLookingFor: cultureInfo.supportLookingFor.filter((item) => item !== option),
+                      });
+                    } else {
+                      setCultureInfo({
+                        ...cultureInfo,
+                        supportLookingFor: [...cultureInfo.supportLookingFor, option],
+                      });
+                    }
+                  }}
+                  style={{
+                    borderWidth: 1.5,
+                    borderColor: selected ? COLORS.border : "#ddd",
+                    backgroundColor: selected ? COLORS.card : "#fff",
+                    padding: 18,
+                    borderRadius: 12,
+                    marginBottom: 12,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={{ fontSize: 16, color: COLORS.textPrimary }}>
+                    {option}
+                  </Text>
+                  {selected && (
+                    <Ionicons name="checkmark-circle" size={22} color={COLORS.primary} />
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          <View style={{ marginBottom: 30 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "600",
+                color: COLORS.textPrimary,
+                marginBottom: 8,
+              }}
+            >
+              What traditions are important to you?
+            </Text>
+            <TextInput
+              style={{
+                borderWidth: 1,
+                borderColor: COLORS.border,
+                backgroundColor: "#fff",
+                padding: 15,
+                borderRadius: 12,
+                fontSize: 16,
+                minHeight: 80,
+                textAlignVertical: "top",
+              }}
+              placeholder="Tell us about traditions that matter to you"
+              value={cultureInfo.importantTraditions}
+              onChangeText={(text) =>
+                setCultureInfo({ ...cultureInfo, importantTraditions: text })
+              }
+              multiline
+            />
+          </View>
+
+          <TouchableOpacity
+            onPress={handleCultureNext}
+            style={{
+              backgroundColor: COLORS.primary,
+              paddingVertical: 16,
+              borderRadius: 12,
+              alignItems: "center",
+              marginBottom: 20,
+            }}
+          >
+            <Text
+              style={{
+                color: COLORS.textPrimary,
+                fontSize: 16,
+                fontWeight: "600",
+              }}
+            >
+              Continue to Identity Confirmation →
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    );
+  };
 
   const renderIdentityConfirmation = () => (
     <ScrollView style={{ flex: 1 }}>
@@ -702,7 +992,7 @@ export default function App() {
           style={{
             flexDirection: "row",
             alignItems: "center",
-            paddingVertical: 10,
+            paddingVertical: 5,
           }}
         >
           {currentStep === 0 ? (
@@ -744,6 +1034,8 @@ export default function App() {
                 {currentStep === 1
                   ? "Personality Quiz"
                   : currentStep === 2
+                  ? "Culture and Background"
+                  : currentStep === 3
                   ? "Identity Confirmation"
                   : "Summary"}
               </Text>
@@ -753,8 +1045,9 @@ export default function App() {
 
         {currentStep === 0 && renderUserInfoForm()}
         {currentStep === 1 && renderQuiz()}
-        {currentStep === 2 && renderIdentityConfirmation()}
-        {currentStep === 3 && renderSummary()}
+        {currentStep === 2 && renderCultureAndBackground()}
+        {currentStep === 3 && renderIdentityConfirmation()}
+        {currentStep === 4 && renderSummary()}
       </SafeAreaView>
     </LinearGradient>
   );

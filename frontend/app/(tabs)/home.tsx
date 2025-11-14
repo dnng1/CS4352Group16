@@ -79,7 +79,10 @@ export default function Dashboard() {
 
       ))}
       <Text style={styles.subheading}>My Groups</Text>
-      <View style={[styles.card, { flexDirection: "row", alignItems: "center", justifyContent: "space-between", height: 100}]}>
+      <TouchableOpacity 
+        style={[styles.card, { flexDirection: "row", alignItems: "center", justifyContent: "space-between", height: 100}]}
+        onPress={() => router.push({ pathname: "/friendgroup", params: { groupName: "Friend Group 1" } })}
+      >
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/512/25/25437.png"}} style={styles.profileImage}></Image>
         <View style={{ flexDirection: "column", marginLeft: 15}}>
           <Text style={styles.groupName}>Friend Group 1</Text>
@@ -89,9 +92,12 @@ export default function Dashboard() {
           </View>
         </View>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png"}} style={styles.nextButton}></Image>
-      </View>
+      </TouchableOpacity>
 
-      <View style={[styles.card, { flexDirection: "row", alignItems: "center", justifyContent: "space-between", height: 100}]}>
+      <TouchableOpacity 
+        style={[styles.card, { flexDirection: "row", alignItems: "center", justifyContent: "space-between", height: 100}]}
+        onPress={() => router.push({ pathname: "/friendgroup", params: { groupName: "Friend Group 3" } })}
+      >
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/512/25/25437.png"}} style={styles.profileImage}></Image>
         <View style={{ flexDirection: "column", marginLeft: 15}}>
           <Text style={styles.groupName}>Friend Group 3</Text>
@@ -101,7 +107,7 @@ export default function Dashboard() {
           </View>
         </View>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png"}} style={styles.nextButton}></Image>
-      </View>
+      </TouchableOpacity>
 
       
     </ScrollView>
