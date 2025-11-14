@@ -18,6 +18,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="createevent"
+        options={{
+          title: "Create Event",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="add" size={size} color={color} />
+          ),
+        }}
+      />
       
     </Tabs>
   );

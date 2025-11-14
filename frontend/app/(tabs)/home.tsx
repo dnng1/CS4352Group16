@@ -1,17 +1,43 @@
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, Image, TouchableOpacity } from "react-native";
-import { useState } from 'react';
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const events = [
+const defaultEvents = [
     { event: "Musical Boat Party", image: "https://m.media-amazon.com/images/I/81s4Yq0JJWL._AC_UF350,350_QL80_.jpg", date: "December 1st", time: "2:00 pm", location: "1234 Sesame St. ", id: 1 },
     { event: "Cornhole Toss", image: "https://www.cornholeworldwide.com/wp-content/uploads/2020/07/shutterstock_717048238.jpg", date: "December 2nd", time: "9:00 am", location: "456 Boat Port ", id: 2 },
     { event: "Friendsgiving Party", image:"https://www.mashed.com/img/gallery/52-thanksgiving-dishes-to-make-you-the-star-of-friendsgiving/intro-1637165015.jpg", date: "November 25th", time: "4:00 pm", location: "1234 ABC St. ", id: 3 }
-  ]
+  ];
 
 export default function Dashboard() {
   const router = useRouter();
   const [search, setSearch] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [events, setEvents] = useState(defaultEvents);
+
+  // Load events from AsyncStorage when screen is focused
+  useFocusEffect(
+    React.useCallback(() => {
+      const loadEvents = async () => {
+        try {
+          const storedEvents = await AsyncStorage.getItem('events');
+          if (storedEvents) {
+            const parsedEvents = JSON.parse(storedEvents);
+            setEvents(parsedEvents);
+          } else {
+            // Initialize with default events if no stored events
+            await AsyncStorage.setItem('events', JSON.stringify(defaultEvents));
+            setEvents(defaultEvents);
+          }
+        } catch (error) {
+          console.error('Error loading events:', error);
+          setEvents(defaultEvents);
+        }
+      };
+      loadEvents();
+    }, [])
+  );
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -146,7 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 24, 
     fontWeight: "700", 
     textAlign: "center", 
-},
+  },
   searchBar: {
     padding: 10, 
     fontSize: 16, 
