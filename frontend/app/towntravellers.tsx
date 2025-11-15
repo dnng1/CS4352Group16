@@ -4,6 +4,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { joinEvent, leaveEvent} from "../utils/eventstorage";
 
 const groupMembers = [
   { id: 1, name: "John Doe", avatar: "https://i.pravatar.cc/150?img=1", online: true },
@@ -17,7 +18,7 @@ const groupMembers = [
 
 const newEvents = [
   {
-    id: 1,
+    id: 4,
     title: "Park Visit",
     location: "1234 Address St, City, State",
     time: "4:00 pm - 8:00 pm",
@@ -29,7 +30,7 @@ const newEvents = [
 
 const upcomingEvents = [
   {
-    id: 2,
+    id: 5,
     title: "Park Visit",
     location: "1234 Address St, City, State",
     time: "4:00 pm - 8:00 pm",
@@ -38,7 +39,7 @@ const upcomingEvents = [
     isGoing: null,
   },
   {
-    id: 3,
+    id: 6,
     title: "Study Group",
     location: "Online",
     time: "12:00 pm - 2:00 pm",
@@ -50,7 +51,7 @@ const upcomingEvents = [
 
 const previousEvents = [
   {
-    id: 4,
+    id: 7,
     title: "Study Group",
     location: "Online",
     time: "12:00 pm - 2:00 pm",
@@ -74,16 +75,25 @@ export default function FriendGroupScreen() {
   const [activeTab, setActiveTab] = useState<'events' | 'chat'>('events');
   const [showMembersModal, setShowMembersModal] = useState(false);
   const [eventStatuses, setEventStatuses] = useState<Record<number, boolean | null>>({
-    2: null,
-    3: null,
+    5: null,
+    6: null,
   });
   const [message, setMessage] = useState('');
 
-  const handleEventResponse = (eventId: number, isGoing: boolean) => {
+  const handleEventResponse = async (eventId: number, isGoing: boolean) => {
     setEventStatuses(prev => ({
       ...prev,
       [eventId]: isGoing,
     }));
+
+    if(isGoing)
+    {
+        await joinEvent(eventId);
+    }
+    else
+    {
+      await leaveEvent(eventId);
+    }
   };
 
   const renderEventCard = (event: any, isPrevious: boolean = false) => {

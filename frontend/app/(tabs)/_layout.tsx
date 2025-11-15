@@ -27,8 +27,7 @@ export default function TabLayout() {
             <Ionicons name="people-outline" size={size} color={color} />
           ),
         }}
-        />
-      
+      />
     </Tabs>
   );
 }
