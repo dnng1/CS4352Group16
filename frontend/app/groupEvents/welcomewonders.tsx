@@ -4,67 +4,59 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { joinEvent, leaveEvent} from "../utils/eventstorage";
+import { joinEvent, leaveEvent} from "../../utils/eventstorage";
 
 const groupMembers = [
-  { id: 1, name: "John Doe", avatar: "https://i.pravatar.cc/150?img=1", online: true },
-  { id: 2, name: "Riya Patel", avatar: "https://i.pravatar.cc/150?img=2", online: true },
-  { id: 3, name: "Juan Sancho", avatar: "https://i.pravatar.cc/150?img=3", online: true },
-  { id: 4, name: "Rose Remirez", avatar: "https://i.pravatar.cc/150?img=4", online: true },
-  { id: 5, name: "Emily Brown", avatar: "https://i.pravatar.cc/150?img=5", online: false },
-  { id: 6, name: "David Lee", avatar: "https://i.pravatar.cc/150?img=6", online: false },
-  { id: 7, name: "Lisa Chen", avatar: "https://i.pravatar.cc/150?img=7", online: false },
+  { id: 1, name: "Angelica Doe", avatar: "https://i.pravatar.cc/150?img=1", online: true },
+  { id: 2, name: "Johnathan Patel", avatar: "https://i.pravatar.cc/150?img=2", online: true },
+  { id: 3, name: "Mary Sancho", avatar: "https://i.pravatar.cc/150?img=3", online: true },
+  { id: 4, name: "Dexter Remirez", avatar: "https://i.pravatar.cc/150?img=4", online: true },
+  { id: 5, name: "Joe Brown", avatar: "https://i.pravatar.cc/150?img=5", online: false },
+  { id: 6, name: "Michael Lee", avatar: "https://i.pravatar.cc/150?img=6", online: false },
+  { id: 7, name: "Lydia Chen", avatar: "https://i.pravatar.cc/150?img=7", online: false },
 ];
 
 const newEvents = [
   {
     id: 4,
-    title: "Park Visit",
-    location: "1234 Address St, City, State",
+    title: "Welcome Orientation",
+    location: "Online",
     time: "4:00 pm - 8:00 pm",
     date: null,
-    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400",
-    peopleGoing: 3,
+    image: "",
+    peopleGoing: 5,
   },
 ];
 
 const upcomingEvents = [
   {
     id: 5,
-    title: "Park Visit",
-    location: "1234 Address St, City, State",
-    time: "4:00 pm - 8:00 pm",
-    date: "Oct 20",
-    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400",
+    title: "Get-to-know-you-bingo",
+    location: "Online",
+    time: "8:00 pm - 9:00 pm",
+    date: "Nov 28",
+    image: "",
     isGoing: null,
   },
   {
     id: 6,
-    title: "Study Group",
-    location: "Online",
-    time: "12:00 pm - 2:00 pm",
+    title: "Get together dinner potluck",
+    location: "1800 W Testing St, Codebusters, TX",
+    time: "7:00 pm - 10:00 pm",
     date: "Today",
-    image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400",
+    image: "",
     isGoing: null,
   },
 ];
 
 const previousEvents = [
   {
-    id: 7,
-    title: "Study Group",
-    location: "Online",
-    time: "12:00 pm - 2:00 pm",
-    date: "Oct 15",
-    image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400",
+    
   },
 ];
 
 const chatMessages = [
-  { id: 1, sender: "John Doe", message: "Hey everyone! Who's up for a park visit this weekend?", time: "10:30 AM" },
-  { id: 2, sender: "Riya Patel", message: "I'm in! 🎉", time: "10:32 AM" },
-  { id: 3, sender: "Juan Sancho", message: "Sounds great! What time?", time: "10:35 AM" },
-  { id: 4, sender: "Lisa Chen", message: "4pm works for me!", time: "10:40 AM" },
+  { id: 1, sender: null, message: null, time: null },
 ];
 
 export default function FriendGroupScreen() {

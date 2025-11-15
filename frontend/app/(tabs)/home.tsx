@@ -129,7 +129,7 @@ export default function Dashboard() {
       <Text style={styles.heading}>Home</Text>
       <TextInput style={styles.searchBar} placeholder="Search" value={search} onChangeText={setSearch}/>
       <Text style={styles.subheading}>My Upcoming Events</Text>
-      {searchFilter.map(ev => (
+      {defaultEvents.map(ev => (
         <View key= {ev.id} style={styles.card}>
           <Image source ={{ uri: ev.image }} style={styles.image} />
             <Text style={styles.eventName}>{ev.event}</Text>

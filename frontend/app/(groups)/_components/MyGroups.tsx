@@ -11,7 +11,8 @@ export default function MyGroups(props: any) {
       <ScrollView>
       <Text style={styles.subheading}>My Groups</Text>
       {/* group 0 */}
-      <View style={[styles.card, { flexDirection: "row", alignItems: "center", height: 100}]}>
+<TouchableOpacity style={[styles.card, { flexDirection: "row", alignItems: "center", height: 100}]}
+        onPress={() => router.push({ pathname: "/groupEvents/welcomewonders", params: { groupName: "Town Travellers" } })}>        
         <Image source={{ uri: "https://cdn-icons-png.flaticon.com/512/25/25437.png" }} style={styles.profileImage}></Image><View style={styles.cardRow}>
                 <View style={{ flexDirection: "column" }}>
                   <Text style={styles.groupName}>Welcome Wonders</Text>
@@ -23,12 +24,12 @@ export default function MyGroups(props: any) {
                 <Image source={{ uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png" }} style={styles.nextButton}></Image>
               </View>
         
-      </View>
+      </TouchableOpacity>
 
 {
   joined[1] && (
-    <View style={[styles.card, { flexDirection: "row", alignItems: "center", height: 100}]}>
-        <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/10156/10156019.png"}} style={styles.profileImage}></Image>
+<TouchableOpacity style={[styles.card, { flexDirection: "row", alignItems: "center", height: 100}]}
+        onPress={() => router.push({ pathname: "/groupEvents/isa", params: { groupName: "Town Travellers" } })}>        <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/10156/10156019.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
             <View style={{ flexDirection: "column"}}>
           <Text style={styles.groupName}>International Student Association</Text>
@@ -39,14 +40,14 @@ export default function MyGroups(props: any) {
         </View>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png"}} style={styles.nextButton}></Image>
         </View>
-      </View>
+      </TouchableOpacity>
   )
 }
 
 {
   joined[2] && (
-    <View style={[styles.card, { flexDirection: "row", alignItems: "center", height: 100}]}>
-        <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/3083/3083417.png"}} style={styles.profileImage}></Image>
+<TouchableOpacity style={[styles.card, { flexDirection: "row", alignItems: "center", height: 100}]}
+        onPress={() => router.push({ pathname: "/groupEvents/musicalwonders", params: { groupName: "Town Travellers" } })}>        <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/3083/3083417.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
             <View style={{ flexDirection: "column"}}>
           <Text style={styles.groupName}>Musical Wonders</Text>
@@ -57,13 +58,14 @@ export default function MyGroups(props: any) {
         </View>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png"}} style={styles.nextButton}></Image>
         </View>
-      </View>
+      </TouchableOpacity>
   )
 }
 
 {
   joined[3] && (
-    <View style={[styles.card, { flexDirection: "row", alignItems: "center", height: 100}]}>
+<TouchableOpacity style={[styles.card, { flexDirection: "row", alignItems: "center", height: 100}]}
+        onPress={() => router.push({ pathname: "/groupEvents/cookingninjas", params: { groupName: "Town Travellers" } })}>        
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/1027/1027128.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
             <View style={{ flexDirection: "column"}}>
@@ -75,13 +77,14 @@ export default function MyGroups(props: any) {
         </View>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png"}} style={styles.nextButton}></Image>
         </View>
-      </View>
+      </TouchableOpacity>
   )
 }
 
 {
   joined[4] && (
-    <View style={[styles.card, { flexDirection: "row", alignItems: "center", height: 100}]}>
+    <TouchableOpacity style={[styles.card, { flexDirection: "row", alignItems: "center", height: 100}]}
+        onPress={() => router.push({ pathname: "/groupEvents/bridgebetweenus", params: { groupName: "Town Travellers" } })}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/1323/1323734.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
             <View style={{ flexDirection: "column"}}>
@@ -93,14 +96,14 @@ export default function MyGroups(props: any) {
         </View>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png"}} style={styles.nextButton}></Image>
         </View>
-      </View>
+      </TouchableOpacity>
   )
 }
 
 {
   joined[5] && (
     <TouchableOpacity style={[styles.card, { flexDirection: "row", alignItems: "center", height: 100}]}
-        onPress={() => router.push({ pathname: "/towntravellers", params: { groupName: "Town Travellers" } })}>
+        onPress={() => router.push({ pathname: "/groupEvents/towntravellers", params: { groupName: "Town Travellers" } })}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/854/854894.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
             <View style={{ flexDirection: "column"}}>
