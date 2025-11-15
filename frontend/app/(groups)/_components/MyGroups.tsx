@@ -31,15 +31,15 @@ export default function MyGroups(props: any) {
         onPress={() => router.push({ pathname: "/groupEvents/isa", params: { groupName: "International Student Association" } })}>        
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/10156/10156019.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
-            <View style={{ flexDirection: "column"}}>
+                <View style={{ flexDirection: "column" }}>
           <Text style={styles.groupName}>International Student Association</Text>
-          <View style={{ flexDirection: "row", marginLeft: 20, marginTop: 5}}>
+          <View style={{ flexDirection: "row", marginLeft: 20, marginTop: 5 }}>
           <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/14026/14026550.png"}} style={styles.online}></Image>
           <Text> 2 online </Text>
           </View>
-        </View>
-        <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png"}} style={styles.nextButton}/>
-        </View>
+                </View>
+                <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png"}} style={styles.nextButton}></Image>
+              </View>
       </TouchableOpacity>
   )
 }

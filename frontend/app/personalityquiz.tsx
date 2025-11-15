@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 
 const COLORS = {
   background: "#FFFFFF",
@@ -131,6 +131,7 @@ const personalityQuestions = [
 
 export default function App() {
   const router = useRouter();
+  const params = useLocalSearchParams();
   const [currentStep, setCurrentStep] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -153,6 +154,13 @@ export default function App() {
 
   const question = personalityQuestions[currentQuestion];
   const totalQuestions = personalityQuestions.length;
+
+  // Check if we should show summary page from route params
+  useEffect(() => {
+    if (params.step === 'summary') {
+      setCurrentStep(4);
+    }
+  }, [params.step]);
 
   const handleUserInfoNext = () => {
     if (userInfo.fullName && userInfo.phoneNumber && userInfo.location) {
@@ -317,6 +325,7 @@ export default function App() {
                 fontSize: 16,
               }}
               placeholder={`Enter your ${field.toLowerCase()}`}
+              placeholderTextColor="#999"
               value={
                 field === "Full Name"
                   ? userInfo.fullName
@@ -503,6 +512,7 @@ export default function App() {
                 fontSize: 16,
               }}
               placeholder="Enter your home country"
+              placeholderTextColor="#999"
               value={cultureInfo.homeCountry}
               onChangeText={(text) =>
                 setCultureInfo({ ...cultureInfo, homeCountry: text })
@@ -603,6 +613,7 @@ export default function App() {
                 textAlignVertical: "top",
               }}
               placeholder="Tell us why you came to this country"
+              placeholderTextColor="#999"
               value={cultureInfo.reasonForComing}
               onChangeText={(text) =>
                 setCultureInfo({ ...cultureInfo, reasonForComing: text })
@@ -686,6 +697,7 @@ export default function App() {
                 textAlignVertical: "top",
               }}
               placeholder="Tell us about traditions that matter to you"
+              placeholderTextColor="#999"
               value={cultureInfo.importantTraditions}
               onChangeText={(text) =>
                 setCultureInfo({ ...cultureInfo, importantTraditions: text })

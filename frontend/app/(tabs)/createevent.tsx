@@ -62,12 +62,18 @@ export default function CreateEventScreen() {
       
       // Mark dates in between
       if (startDate && endDate) {
-        const start = new Date(startDate);
-        const end = new Date(endDate);
+        const [startYear, startMonth, startDay] = startDate.split('-').map(Number);
+        const [endYear, endMonth, endDay] = endDate.split('-').map(Number);
+        const start = new Date(startYear, startMonth - 1, startDay);
+        const end = new Date(endYear, endMonth - 1, endDay);
         const current = new Date(start);
         
         while (current <= end) {
-          const dateString = current.toISOString().split("T")[0];
+          const year = current.getFullYear();
+          const month = String(current.getMonth() + 1).padStart(2, '0');
+          const day = String(current.getDate()).padStart(2, '0');
+          const dateString = `${year}-${month}-${day}`;
+          
           if (dateString !== startDate && dateString !== endDate) {
             marked[dateString] = {
               color: COLORS.primary,
@@ -105,6 +111,16 @@ export default function CreateEventScreen() {
     const ampm = hour >= 12 ? "PM" : "AM";
     const displayHour = hour % 12 || 12;
     return `${displayHour}:${minutes} ${ampm}`;
+  };
+
+  const formatDateString = (dateString: string) => {
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', { 
+      month: 'long', 
+      day: 'numeric',
+      year: 'numeric'
+    });
   };
 
   const handleTimeChange = (time: string, isStart: boolean) => {
@@ -223,18 +239,10 @@ export default function CreateEventScreen() {
           {startDate && endDate && (
             <View style={styles.dateRangeContainer}>
               <Text style={styles.dateRangeText}>
-                {new Date(startDate).toLocaleDateString('en-US', { 
-                  month: 'long', 
-                  day: 'numeric',
-                  year: 'numeric'
-                })}
+                {formatDateString(startDate)}
                 {startTime && ` at ${formatTime(startTime)}`}
                 {" - "}
-                {new Date(endDate).toLocaleDateString('en-US', { 
-                  month: 'long', 
-                  day: 'numeric',
-                  year: 'numeric'
-                })}
+                {formatDateString(endDate)}
                 {endTime && ` at ${formatTime(endTime)}`}
               </Text>
             </View>

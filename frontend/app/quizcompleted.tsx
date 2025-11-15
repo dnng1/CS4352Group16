@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 const COLORS = {
   background: "#FFFFFF",
@@ -33,10 +34,18 @@ export default function QuizCompleted() {
   const router = useRouter();
 
   const goHome = () => router.replace("/(tabs)/home");
+  const goBack = () => router.push("/personalityquiz?step=summary");
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
+        <TouchableOpacity
+          onPress={goBack}
+          style={styles.backButton}
+        >
+          <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
+          <Text style={styles.backButtonText}>Back</Text>
+        </TouchableOpacity>
         <Text style={styles.title}>Quiz Completed!</Text>
         <Text style={styles.subtitle}>Here are some groups based on your preferences:</Text>
 
@@ -76,6 +85,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingBottom: 40,
+  },
+  backButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start",
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  backButtonText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: COLORS.primary,
+    marginLeft: 4,
   },
   title: {
     marginTop: 20,
