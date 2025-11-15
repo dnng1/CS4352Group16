@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, Image, TouchableOpacity, Modal, FlatList } from "react-native";
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, ScrollView, TextInput, Image, TouchableOpacity, Modal, FlatList, Alert } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { joinEvent, leaveEvent} from "../../utils/eventstorage";
+import * as ImagePicker from "expo-image-picker";
 
 const groupMembers = [
   { id: 1, name: "John Doe", avatar: "https://i.pravatar.cc/150?img=1", online: true },
@@ -81,11 +82,11 @@ const previousEvents = [
   },
 ];
 
-const chatMessages = [
-  { id: 1, sender: "John Doe", message: "hey yall, i just moved a month ago and am looking for grad school opportunities. do yall know any good resrouces? ", time: "1:21 AM" },
-  { id: 2, sender: "Riya Patel", message: "come to the career insights event", time: "1:32 AM" },
-  { id: 3, sender: "Juan Sancho", message: "wait wait ill join too", time: "9:35 AM" },
-  { id: 4, sender: "Lisa Chen", message: "you can network with a lot of ppl", time: "8:40 pm" },
+const defaultChatMessages: Array<{ id: number; sender: string; message?: string; image?: string; time: string; type: 'text' | 'image' }> = [
+  { id: 1, sender: "John Doe", message: "hey yall, i just moved a month ago and am looking for grad school opportunities. do yall know any good resrouces? ", time: "1:21 AM", type: 'text' },
+  { id: 2, sender: "Riya Patel", message: "come to the career insights event", time: "1:32 AM", type: 'text' },
+  { id: 3, sender: "Juan Sancho", message: "wait wait ill join too", time: "9:35 AM", type: 'text' },
+  { id: 4, sender: "Lisa Chen", message: "you can network with a lot of ppl", time: "8:40 pm", type: 'text' },
 ];
 
 export default function FriendGroupScreen() {
@@ -100,6 +101,106 @@ export default function FriendGroupScreen() {
     6: null,
   });
   const [message, setMessage] = useState('');
+  const [chatMessages, setChatMessages] = useState(defaultChatMessages);
+  const flatListRef = useRef<FlatList>(null);
+  const currentUser = "You";
+
+  const getCurrentTime = () => {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    const displayHours = hours % 12 || 12;
+    return `${displayHours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+  };
+
+  const handleSendMessage = () => {
+    if (!message.trim()) return;
+
+    const newMessage = {
+      id: Date.now(),
+      sender: currentUser,
+      message: message.trim(),
+      time: getCurrentTime(),
+      type: 'text' as const,
+    };
+
+    setChatMessages(prev => [...prev, newMessage]);
+    setMessage('');
+    
+    setTimeout(() => {
+      flatListRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+  };
+
+  const handlePickImage = async () => {
+    try {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission needed', 'Please grant camera roll permissions to send images');
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        const newMessage = {
+          id: Date.now(),
+          sender: currentUser,
+          image: result.assets[0].uri,
+          time: getCurrentTime(),
+          type: 'image' as const,
+        };
+
+        setChatMessages(prev => [...prev, newMessage]);
+        
+        setTimeout(() => {
+          flatListRef.current?.scrollToEnd({ animated: true });
+        }, 100);
+      }
+    } catch (error) {
+      console.error('Error picking image:', error);
+      Alert.alert('Error', 'Failed to pick image');
+    }
+  };
+
+  const handleTakePhoto = async () => {
+    try {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission needed', 'Please grant camera permissions to take photos');
+        return;
+      }
+
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        const newMessage = {
+          id: Date.now(),
+          sender: currentUser,
+          image: result.assets[0].uri,
+          time: getCurrentTime(),
+          type: 'image' as const,
+        };
+
+        setChatMessages(prev => [...prev, newMessage]);
+        
+        setTimeout(() => {
+          flatListRef.current?.scrollToEnd({ animated: true });
+        }, 100);
+      }
+    } catch (error) {
+      console.error('Error taking photo:', error);
+      Alert.alert('Error', 'Failed to take photo');
+    }
+  };
 
   const handleEventResponse = async (eventId: number, isGoing: boolean) => {
     setEventStatuses(prev => ({
@@ -118,12 +219,18 @@ export default function FriendGroupScreen() {
   };
 
   const renderEventCard = (event: any, isPrevious: boolean = false) => {
+    if (!event || !event.id) return null;
+    
     const isUpcoming = !isPrevious && event.isGoing !== undefined;
     const isGoing = eventStatuses[event.id] ?? event.isGoing;
 
     return (
-      <View key={event.id} style={[styles.eventCard, isPrevious && styles.previousEventCard]}>
-        <Image source={{ uri: event.image }} style={styles.eventImage} />
+      <View style={[styles.eventCard, isPrevious && styles.previousEventCard]}>
+        {event.image && event.image.trim() ? (
+          <Image source={{ uri: event.image }} style={styles.eventImage} />
+        ) : (
+          <View style={styles.eventImage} />
+        )}
         <View style={styles.eventDetails}>
           <Text style={[styles.eventTitle, isPrevious && styles.previousEventText]}>{event.title}</Text>
           <Text style={[styles.eventInfo, isPrevious && styles.previousEventText]}>{event.location}</Text>
@@ -172,17 +279,29 @@ export default function FriendGroupScreen() {
     <ScrollView style={styles.eventsContainer} showsVerticalScrollIndicator={false}>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>New Events</Text>
-        {newEvents.map(event => renderEventCard(event))}
+        {newEvents.filter(event => event && event.id).map(event => (
+          <View key={event.id}>
+            {renderEventCard(event)}
+          </View>
+        ))}
       </View>
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Upcoming Events</Text>
-        {upcomingEvents.map(event => renderEventCard(event))}
+        {upcomingEvents.filter(event => event && event.id).map(event => (
+          <View key={event.id}>
+            {renderEventCard(event)}
+          </View>
+        ))}
       </View>
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Previous Events</Text>
-        {previousEvents.map(event => renderEventCard(event, true))}
+        {previousEvents.filter(event => event && event.id).map(event => (
+          <View key={event.id}>
+            {renderEventCard(event, true)}
+          </View>
+        ))}
       </View>
     </ScrollView>
   );
@@ -190,16 +309,23 @@ export default function FriendGroupScreen() {
   const renderChatTab = () => (
     <View style={styles.chatContainer}>
       <FlatList
+        ref={flatListRef}
         data={chatMessages}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={styles.chatMessages}
         renderItem={({ item }) => (
           <View style={styles.messageBubble}>
             <Text style={styles.messageSender}>{item.sender}</Text>
-            <Text style={styles.messageText}>{item.message}</Text>
+            {item.type === 'text' && item.message && (
+              <Text style={styles.messageText}>{item.message}</Text>
+            )}
+            {item.type === 'image' && item.image && (
+              <Image source={{ uri: item.image }} style={styles.messageImage} />
+            )}
             <Text style={styles.messageTime}>{item.time}</Text>
           </View>
         )}
+        onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
       />
     </View>
   );
@@ -267,17 +393,33 @@ export default function FriendGroupScreen() {
               value={message}
               onChangeText={setMessage}
               multiline
+              editable={true}
+              onSubmitEditing={handleSendMessage}
             />
-            <View style={styles.inputIcons}>
-              <TouchableOpacity style={[styles.inputIcon, { marginLeft: 0 }]}>
-                <Ionicons name="mic" size={24} color="#007AFF" />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.inputIcon}>
+            <View style={styles.inputIcons} pointerEvents="box-none">
+              <TouchableOpacity 
+                style={[styles.inputIcon, { marginLeft: 0 }]}
+                onPress={handlePickImage}
+                activeOpacity={0.7}
+              >
                 <Ionicons name="image" size={24} color="#007AFF" />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.inputIcon}>
+              <TouchableOpacity 
+                style={styles.inputIcon}
+                onPress={handleTakePhoto}
+                activeOpacity={0.7}
+              >
                 <Ionicons name="camera" size={24} color="#007AFF" />
               </TouchableOpacity>
+              {message.trim() && (
+                <TouchableOpacity 
+                  style={styles.sendButton}
+                  onPress={handleSendMessage}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons name="send" size={20} color="#fff" />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>
@@ -479,6 +621,7 @@ const styles = StyleSheet.create({
   chatContainer: {
     flex: 1,
     zIndex: 1,
+    pointerEvents: 'box-none',
   },
   chatMessages: {
     padding: 16,
@@ -527,12 +670,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 5,
+    zIndex: 100,
+    pointerEvents: 'box-none',
   },
   messageInput: {
     flex: 1,
     fontSize: 16,
     color: '#000',
     maxHeight: 100,
+    pointerEvents: 'auto',
   },
   inputIcons: {
     flexDirection: 'row',
@@ -618,6 +764,21 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#fff',
     marginRight: 8,
+  },
+  messageImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 12,
+    marginVertical: 8,
+  },
+  sendButton: {
+    backgroundColor: '#007AFF',
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 8,
   },
 });
 
