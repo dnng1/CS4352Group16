@@ -37,7 +37,7 @@ export default function MyGroups(props: any) {
           <Text> 2 online </Text>
           </View>
         </View>
-        <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png"}} style={styles.nextButton}></Image>
+        <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png"}} style={styles.nextButton}/>
         </View>
       </View>
   )

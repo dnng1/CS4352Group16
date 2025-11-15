@@ -28,6 +28,12 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+      name="createevent"
+        options={{
+          title: "Create Event",
+        }}
+      />
     </Tabs>
   );
 }
