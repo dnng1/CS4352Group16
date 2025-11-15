@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet, ScrollView, TextInput, Image, TouchableOpacity } from "react-native";
 import { useState } from 'react';
+import { useRouter } from "expo-router";
 
 export default function MyGroups(props: any) {
     const[next, setNext] = useState<{ [key: number]: boolean}>({});
+    const router = useRouter();
     const { joined  = {}} = props; 
     return (
     <View style={styles.container}>
@@ -29,7 +31,7 @@ export default function MyGroups(props: any) {
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/10156/10156019.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
             <View style={{ flexDirection: "column"}}>
-          <Text style={styles.groupName}>Internation Student Association</Text>
+          <Text style={styles.groupName}>International Student Association</Text>
           <View style={{ flexDirection: "row", marginLeft: 20, marginTop: 5}}>
             <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/14026/14026550.png"}} style={styles.online}></Image>
           <Text> 2 online </Text>
@@ -97,7 +99,8 @@ export default function MyGroups(props: any) {
 
 {
   joined[5] && (
-    <View style={[styles.card, { flexDirection: "row", alignItems: "center", height: 100}]}>
+    <TouchableOpacity style={[styles.card, { flexDirection: "row", alignItems: "center", height: 100}]}
+        onPress={() => router.push({ pathname: "/towntravellers", params: { groupName: "Town Travellers" } })}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/854/854894.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
             <View style={{ flexDirection: "column"}}>
@@ -109,7 +112,7 @@ export default function MyGroups(props: any) {
         </View>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png"}} style={styles.nextButton}></Image>
         </View>
-      </View>
+      </TouchableOpacity>
   )
 }
 

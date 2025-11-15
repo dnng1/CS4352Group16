@@ -7,9 +7,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const groupMembers = [
   { id: 1, name: "John Doe", avatar: "https://i.pravatar.cc/150?img=1", online: true },
-  { id: 2, name: "Jane Smith", avatar: "https://i.pravatar.cc/150?img=2", online: true },
-  { id: 3, name: "Mike Johnson", avatar: "https://i.pravatar.cc/150?img=3", online: true },
-  { id: 4, name: "Sarah Williams", avatar: "https://i.pravatar.cc/150?img=4", online: true },
+  { id: 2, name: "Riya Patel", avatar: "https://i.pravatar.cc/150?img=2", online: true },
+  { id: 3, name: "Juan Sancho", avatar: "https://i.pravatar.cc/150?img=3", online: true },
+  { id: 4, name: "Rose Remirez", avatar: "https://i.pravatar.cc/150?img=4", online: true },
   { id: 5, name: "Emily Brown", avatar: "https://i.pravatar.cc/150?img=5", online: false },
   { id: 6, name: "David Lee", avatar: "https://i.pravatar.cc/150?img=6", online: false },
   { id: 7, name: "Lisa Chen", avatar: "https://i.pravatar.cc/150?img=7", online: false },
@@ -61,9 +61,9 @@ const previousEvents = [
 
 const chatMessages = [
   { id: 1, sender: "John Doe", message: "Hey everyone! Who's up for a park visit this weekend?", time: "10:30 AM" },
-  { id: 2, sender: "Jane Smith", message: "I'm in! 🎉", time: "10:32 AM" },
-  { id: 3, sender: "Mike Johnson", message: "Sounds great! What time?", time: "10:35 AM" },
-  { id: 4, sender: "Sarah Williams", message: "4pm works for me!", time: "10:40 AM" },
+  { id: 2, sender: "Riya Patel", message: "I'm in! 🎉", time: "10:32 AM" },
+  { id: 3, sender: "Juan Sancho", message: "Sounds great! What time?", time: "10:35 AM" },
+  { id: 4, sender: "Lisa Chen", message: "4pm works for me!", time: "10:40 AM" },
 ];
 
 export default function FriendGroupScreen() {

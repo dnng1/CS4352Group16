@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, Image, TouchableOpacity } from "react-native";
 import { useRouter, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -53,12 +53,21 @@ const formatTimeRange = (event: any) => {
   return event.time || "";
 };
 
+
+
 export default function Dashboard() {
   const router = useRouter();
   const [search, setSearch] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [events, setEvents] = useState(defaultEvents);
 
+  const searchFilter = useMemo(() => {
+  const searched = search.toUpperCase();
+  return events.filter(eventlist => 
+  eventlist.event.toUpperCase().includes(searched) || eventlist.location.toUpperCase().includes(searched) || eventlist.date.toUpperCase().includes(searched)
+  ); 
+  
+}, [search, events])
   // Load events from AsyncStorage when screen is focused
   useFocusEffect(
     React.useCallback(() => {
@@ -111,7 +120,7 @@ export default function Dashboard() {
       <Text style={styles.heading}>Home</Text>
       <TextInput style={styles.searchBar} placeholder="Search" value={search} onChangeText={setSearch}/>
       <Text style={styles.subheading}>My Upcoming Events</Text>
-      {events.map((item) => (
+      {searchFilter.map((item) => (
         <View key={item.id} style={styles.card}>
             <Image source={{uri: item.image }} style={styles.image}></Image>
             <Text style={styles.eventName}>{item.event}</Text>
@@ -121,36 +130,6 @@ export default function Dashboard() {
         </View>
 
       ))}
-      <Text style={styles.subheading}>My Groups</Text>
-      <TouchableOpacity 
-        style={[styles.card, { flexDirection: "row", alignItems: "center", justifyContent: "space-between", height: 100}]}
-        onPress={() => router.push({ pathname: "/friendgroup", params: { groupName: "Friend Group 1" } })}
-      >
-        <Image source={{uri: "https://cdn-icons-png.flaticon.com/512/25/25437.png"}} style={styles.profileImage}></Image>
-        <View style={{ flexDirection: "column", marginLeft: 15}}>
-          <Text style={styles.groupName}>Friend Group 1</Text>
-          <View style={{ flexDirection: "row"}}>
-            <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/14026/14026550.png"}} style={styles.online}></Image>
-          <Text> 3 online </Text>
-          </View>
-        </View>
-        <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png"}} style={styles.nextButton}></Image>
-      </TouchableOpacity>
-
-      <TouchableOpacity 
-        style={[styles.card, { flexDirection: "row", alignItems: "center", justifyContent: "space-between", height: 100}]}
-        onPress={() => router.push({ pathname: "/friendgroup", params: { groupName: "Friend Group 3" } })}
-      >
-        <Image source={{uri: "https://cdn-icons-png.flaticon.com/512/25/25437.png"}} style={styles.profileImage}></Image>
-        <View style={{ flexDirection: "column", marginLeft: 15}}>
-          <Text style={styles.groupName}>Friend Group 3</Text>
-          <View style={{ flexDirection: "row"}}>
-            <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/14026/14026550.png"}} style={styles.online}></Image>
-          <Text> 6 online </Text>
-          </View>
-        </View>
-        <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/189/189253.png"}} style={styles.nextButton}></Image>
-      </TouchableOpacity>
 
       
     </ScrollView>
