@@ -13,6 +13,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { joinEvent } from "../utils/eventstorage";
 
 const COLORS = {
   primary: "#7CA7D9",
@@ -146,6 +147,7 @@ export default function CreateEventDetailsScreen() {
       
       // Save to AsyncStorage
       await AsyncStorage.setItem('events', JSON.stringify(updatedEvents));
+      await joinEvent(newEvent.id); //adds new event as joined
 
       // Show success and navigate
       Alert.alert(

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TextInput, Image, TouchableOpacity 
 import { useRouter, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getJoinedEventIds } from "../../utils/eventstorage";
 
 const defaultEvents = [
     { event: "Musical Boat Party", image: "https://m.media-amazon.com/images/I/81s4Yq0JJWL._AC_UF350,350_QL80_.jpg", date: "December 1st", time: "2:00 pm", location: "1234 Sesame St. ", id: 1 },
@@ -58,6 +59,7 @@ export default function Dashboard() {
   const [search, setSearch] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [events, setEvents] = useState(defaultEvents);
+  const [joinedEventIds, setJoinedEventIds] = useState<number[]>([]);
 
   // Load events from AsyncStorage when screen is focused
   useFocusEffect(
@@ -78,7 +80,14 @@ export default function Dashboard() {
           setEvents(defaultEvents);
         }
       };
+      const loadJoinedEvents = async () =>
+      {
+        const ids = await getJoinedEventIds(); 
+        //console.log("Loaded joined event ids: ", ids);
+        setJoinedEventIds(ids);
+      };
       loadEvents();
+      loadJoinedEvents(); //loads which events the user joined
     }, [])
   );
   return (
@@ -111,16 +120,27 @@ export default function Dashboard() {
       <Text style={styles.heading}>Home</Text>
       <TextInput style={styles.searchBar} placeholder="Search" value={search} onChangeText={setSearch}/>
       <Text style={styles.subheading}>My Upcoming Events</Text>
-      {events.map((item) => (
-        <View key={item.id} style={styles.card}>
-            <Image source={{uri: item.image }} style={styles.image}></Image>
-            <Text style={styles.eventName}>{item.event}</Text>
-            <Text style={styles.eventDetails}>{formatTimeRange(item)}</Text>
-            <Text style={styles.eventDetails}>{formatDateRange(item)}</Text>
-            <Text style={[styles.eventDetails, {marginBottom: 10}]}>{item.location}</Text>
+      {defaultEvents.map(ev => (
+        <View key= {ev.id} style={styles.card}>
+          <Image source ={{ uri: ev.image }} style={styles.image} />
+            <Text style={styles.eventName}>{ev.event}</Text>
+            <Text style={styles.eventDetails}>{formatTimeRange(ev)}</Text>
+            <Text style={styles.eventDetails}>{formatDateRange(ev)}</Text>
+            <Text style={[styles.eventDetails, {marginBottom: 10}]}>{ev.location}</Text>
         </View>
-
       ))}
+      {events
+        .filter(ev => joinedEventIds.includes(ev.id)) //only show joined
+        .map(ev => (
+                  <View key= {ev.id} style={styles.card}>
+          <Image source ={{ uri: ev.image }} style={styles.image} />
+            <Text style={styles.eventName}>{ev.event}</Text>
+            <Text style={styles.eventDetails}>{formatTimeRange(ev)}</Text>
+            <Text style={styles.eventDetails}>{formatDateRange(ev)}</Text>
+            <Text style={[styles.eventDetails, {marginBottom: 10}]}>{ev.location}</Text>
+        </View>
+        ))
+      }
       <Text style={styles.subheading}>My Groups</Text>
       <TouchableOpacity 
         style={[styles.card, { flexDirection: "row", alignItems: "center", justifyContent: "space-between", height: 100}]}
