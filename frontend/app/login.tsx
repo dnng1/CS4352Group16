@@ -14,8 +14,39 @@ export default function LoginScreen() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const validateEmail = (email: string): boolean => {
+    if (!email.includes('@')) {
+      setEmailError("Email must contain @");
+      return false;
+    }
+    if (!email.includes('.com')) {
+      setEmailError("Email must contain .com");
+      return false;
+    }
+    setEmailError("");
+    return true;
+  };
+
+  const validatePassword = (password: string): boolean => {
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long");
+      return false;
+    }
+    setPasswordError("");
+    return true;
+  };
 
   const handleLogin = () => {
+    const isEmailValid = validateEmail(email);
+    const isPasswordValid = validatePassword(password);
+
+    if (!isEmailValid || !isPasswordValid) {
+      return;
+    }
+
     router.push("/(tabs)/home");
   };
 
@@ -31,25 +62,39 @@ export default function LoginScreen() {
 
       <View style={styles.fieldGroup}>
         <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your email"
-          placeholderTextColor="#999"
-          value={email}
-          onChangeText={setEmail}
+        <TextInput 
+          style={[styles.input, emailError && styles.inputError]} 
+          placeholder="Enter your email" 
+          placeholderTextColor="#999" 
+          value={email} 
+          onChangeText={(text) => {
+            setEmail(text);
+            if (emailError) {
+              validateEmail(text);
+            }
+          }}
+          onBlur={() => validateEmail(email)}
         />
+        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
       </View>
 
       <View style={styles.fieldGroup}>
         <Text style={styles.label}>Password</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your password"
-          placeholderTextColor="#999"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
+        <TextInput 
+          style={[styles.input, passwordError && styles.inputError]} 
+          placeholder="Enter your password" 
+          placeholderTextColor="#999" 
+          secureTextEntry 
+          value={password} 
+          onChangeText={(text) => {
+            setPassword(text);
+            if (passwordError) {
+              validatePassword(text);
+            }
+          }}
+          onBlur={() => validatePassword(password)}
         />
+        {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
       </View>
 
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
@@ -64,7 +109,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     paddingTop: 60,
     paddingHorizontal: 24,
     alignItems: "center",
@@ -133,6 +178,15 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     marginTop: 20,
     fontSize: 14,
+  },
+  inputError: {
+    borderColor: "#FF0000",
+  },
+  errorText: {
+    color: "#FF0000",
+    fontSize: 12,
+    marginTop: 4,
+    marginLeft: 4,
   },
 });
 

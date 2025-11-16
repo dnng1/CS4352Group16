@@ -465,7 +465,7 @@ export default function FriendGroupScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E6F4FE',
+    backgroundColor: '#FFFFFF',
   },
   header: {
     backgroundColor: '#fff',
@@ -539,7 +539,7 @@ const styles = StyleSheet.create({
   },
   whiteCard: {
     flex: 1,
-    backgroundColor: '#E6F4FE',
+    backgroundColor: '#FFFFFF',
     marginHorizontal: 0,
     marginTop: 0,
     marginBottom: 0,

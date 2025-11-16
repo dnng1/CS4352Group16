@@ -31,6 +31,7 @@ export default function CreateEventScreen() {
   const [endTime, setEndTime] = useState("");
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [groups, setGroups] = useState<{ id: string; name: string }[]>([]);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const loadJoinedGroups = async () => {
@@ -211,17 +212,32 @@ export default function CreateEventScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <TouchableOpacity
-          onPress={() => router.push("/(tabs)/home")}
-          style={styles.backButton}
-        >
-          <Ionicons name="chevron-back" size={24} color="#000" />
-          <Text style={styles.backButtonText}>Back</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.title}>Create New Event</Text>
-
+      <View style={styles.headerRow}>
+        <View style={styles.profileContainer}>
+          <TouchableOpacity
+            style={styles.profileButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            onPress={() => setMenuOpen(!menuOpen)}
+          >
+            <View style={styles.profileCircle}>
+              <Text style={styles.profileInitials}>U</Text>
+            </View>
+          </TouchableOpacity>
+          {menuOpen && (
+            <View style={styles.menuInFlow} pointerEvents="auto">
+              <TouchableOpacity
+                style={styles.menuItem}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                onPress={() => { setMenuOpen(false); router.replace('/welcome'); }}
+              >
+                <Text style={styles.menuText}>Sign out</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      </View>
+      <Text style={styles.heading}>Create New Event</Text>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         <View style={styles.fieldGroup}>
           <Text style={styles.label}>Event Name *</Text>
           <TextInput
@@ -375,25 +391,65 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    paddingTop: 60,
-    paddingHorizontal: 24,
+    padding: 20,
   },
-  backButton: {
+  headerRow: {
     flexDirection: "row",
+    justifyContent: "flex-end",
     alignItems: "center",
-    marginBottom: 20,
   },
-  backButtonText: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#000",
+  profileContainer: {
+    position: "relative",
+    height: 44,
   },
-  title: {
-    fontSize: 28,
+  profileButton: {
+    paddingTop: 10,
+  },
+  heading: { 
+    marginTop: 10,
+    marginBottom: 40,
+    fontSize: 24, 
+    fontWeight: "700", 
+    textAlign: "center", 
+  },
+  profileCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "#E2E8F0",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "#CBD5E1",
+  },
+  profileInitials: {
     fontWeight: "700",
-    color: COLORS.textPrimary,
-    marginBottom: 24,
-    textAlign: "center",
+    color: "#1F2937",
+  },
+  menuInFlow: {
+    position: "absolute",
+    top: 44,
+    right: 0,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    paddingVertical: 6,
+    width: 140,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    zIndex: 999,
+  },
+  menuItem: {
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+  },
+  menuText: {
+    fontSize: 14,
+    color: "#111827",
   },
   fieldGroup: {
     width: "100%",
@@ -507,6 +563,9 @@ const styles = StyleSheet.create({
     color: COLORS.textPrimary,
     fontSize: 16,
     fontWeight: "600",
+  },
+  scrollContent: {
+    paddingBottom: 40,
   },
 });
 

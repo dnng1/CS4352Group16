@@ -38,11 +38,7 @@ export default function Groups() {
 
   return (
     <SafeAreaView style={styles.container} edges={[]}>
-      <View style={styles.header}>
-        <View style={styles.placeholder} />
-        <View style={styles.titleContainer}>
-          <Text style={styles.headerTitle}>Groups</Text>
-        </View>
+      <View style={styles.headerRow}>
         <View style={styles.profileContainer}>
           <TouchableOpacity
             style={styles.profileButton}
@@ -66,6 +62,7 @@ export default function Groups() {
           )}
         </View>
       </View>
+      <Text style={styles.heading}>Groups</Text>
 
       <View style={styles.toggleBar}>
         <TouchableOpacity
@@ -106,38 +103,20 @@ export default function Groups() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E6F4FE',
+    backgroundColor: '#FFFFFF',
+    padding: 20,
   },
-  header: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  placeholder: {
-    width: 40,
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    fontStyle: 'italic',
-    color: '#000',
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   profileContainer: {
     position: "relative",
     height: 44,
   },
   profileButton: {
-    padding: 8,
+    paddingTop: 10,
   },
   profileCircle: {
     width: 36,
@@ -178,11 +157,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#111827",
   },
+  heading: { 
+    marginTop: 10,
+    fontSize: 24, 
+    fontWeight: "700", 
+    textAlign: "center", 
+  },
   toggleBar: {
     flexDirection: 'row',
     backgroundColor: '#fff',
-    marginHorizontal: 16,
-    marginTop: -20,
+    marginHorizontal: 0,
+    marginTop: 20,
     marginBottom: 8,
     borderRadius: 20,
     padding: 0,
@@ -201,7 +186,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   toggleButtonActive: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#7CA7D9',
   },
   toggleText: {
     fontSize: 16,
@@ -213,7 +198,7 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     flex: 1,
-    backgroundColor: '#E6F4FE',
+    backgroundColor: '#FFFFFF',
   },
   scrollView: {
     paddingHorizontal: 20,
