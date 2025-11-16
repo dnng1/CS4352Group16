@@ -4,12 +4,6 @@ import { useRouter, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getJoinedEventIds } from "../../utils/eventstorage";
-import { resetStorage } from '@/utils/appStartup';
-
-useEffect(() => 
-{
-  resetStorage();
-}, []);
 
 const defaultEvents = [
     { event: "Musical Boat Party", image: "https://m.media-amazon.com/images/I/81s4Yq0JJWL._AC_UF350,350_QL80_.jpg", date: "December 1st", time: "2:00 pm", location: "1234 Sesame St. ", id: 1 },

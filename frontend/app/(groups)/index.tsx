@@ -3,8 +3,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import MyGroups from "./_components/MyGroups";
 import FindGroups from "./_components/FindGroups";
 import { useState, useEffect } from 'react';
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import React from "react";
 
 export default function Groups() {
   const router = useRouter();
@@ -18,23 +19,53 @@ export default function Groups() {
     4: false, 
     5: false
   });
+  const [hasLoaded, setHasLoaded] = useState(false);
 
-  useEffect (() => {
-    const savedGroups = async () => {
-      const saved = await AsyncStorage.getItem('joinedGroups');
-      if(saved){
-        setJoin(JSON.parse(saved));
+  // Load joined groups when screen is focused
+  useFocusEffect(
+    React.useCallback(() => {
+      const loadGroups = async () => {
+        try {
+          const saved = await AsyncStorage.getItem('joinedGroups');
+          if(saved){
+            const parsed = JSON.parse(saved);
+            setJoin(parsed);
+          } else {
+            // Initialize with default if nothing saved
+            const defaultGroups = {
+              0: true,
+              1: false,
+              2: false, 
+              3: false, 
+              4: false, 
+              5: false
+            };
+            await AsyncStorage.setItem('joinedGroups', JSON.stringify(defaultGroups));
+            setJoin(defaultGroups);
+          }
+          setHasLoaded(true);
+        } catch (error) {
+          console.error('Error loading groups:', error);
+          setHasLoaded(true);
+        }
+      }; 
+      loadGroups();
+    }, [])
+  );
+
+  // Save joined groups to AsyncStorage whenever state changes (but only after initial load)
+  useEffect(() => {
+    if (!hasLoaded) return;
+    
+    const saveGroups = async () => {
+      try {
+        await AsyncStorage.setItem('joinedGroups', JSON.stringify(joined));
+      } catch (error) {
+        console.error('Error saving groups:', error);
       }
     }; 
-    savedGroups();
-  }, []);
-
-    useEffect (() => {
-    const saveGroups = async () => {
-      await AsyncStorage.setItem('joinedGroups', JSON.stringify(joined));
-    }; 
     saveGroups();
-  }, [joined]);
+  }, [joined, hasLoaded]);
 
   return (
     <SafeAreaView style={styles.container} edges={[]}>

@@ -42,22 +42,27 @@ export default function QuizCompleted() {
   const goBack = () => router.push("/personalityquiz?step=summary");
 
   const [joined, setJoin] = useState<{[key: number]:boolean}>({});
+  const [hasLoaded, setHasLoaded] = useState(false);
+  
   useEffect (() => {
     const savedGroups = async () => {
       const saved = await AsyncStorage.getItem('joinedGroups');
       if(saved){
         setJoin(JSON.parse(saved));
       }
+      setHasLoaded(true);
     }; 
     savedGroups();
   }, []);
 
-    useEffect (() => {
+  useEffect (() => {
+    if (!hasLoaded) return;
+    
     const saveGroups = async () => {
       await AsyncStorage.setItem('joinedGroups', JSON.stringify(joined));
     }; 
     saveGroups();
-  }, [joined]);
+  }, [joined, hasLoaded]);
 
   return (
     <View style={styles.container}>

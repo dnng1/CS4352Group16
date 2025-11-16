@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, Image, TouchableOpacity, Modal, FlatList, Alert } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TextInput, Image, TouchableOpacity, Modal, FlatList, Alert, KeyboardAvoidingView, Platform } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { joinEvent, leaveEvent} from "../../utils/eventstorage";
+import { joinEvent, leaveEvent, leaveGroup} from "../../utils/eventstorage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 
@@ -319,8 +319,7 @@ export default function FriendGroupScreen() {
   );
 
   const renderChatTab = () => (
-    <View style={styles.chatContainer}>
-      <FlatList
+    <FlatList
         ref={flatListRef}
         data={chatMessages}
         keyExtractor={(item) => item.id.toString()}
@@ -339,7 +338,6 @@ export default function FriendGroupScreen() {
         )}
         onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
       />
-    </View>
   );
 
   return (
@@ -410,12 +408,18 @@ export default function FriendGroupScreen() {
           {renderEventsTab()}
         </View>
       ) : (
-        <View style={styles.chatWrapper}>
+        <KeyboardAvoidingView 
+          style={styles.chatWrapper}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+        >
           <LinearGradient
             colors={['#E6F4FE', '#E8E0F7']}
             style={styles.chatGradient}
           />
-          {renderChatTab()}
+          <View style={styles.chatContainer}>
+            {renderChatTab()}
+          </View>
           
           <View style={styles.inputContainer}>
             <TextInput
@@ -443,18 +447,16 @@ export default function FriendGroupScreen() {
               >
                 <Ionicons name="camera" size={24} color="#007AFF" />
               </TouchableOpacity>
-              {message.trim() && (
-                <TouchableOpacity 
-                  style={styles.sendButton}
-                  onPress={handleSendMessage}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons name="send" size={20} color="#fff" />
-                </TouchableOpacity>
-              )}
+              <TouchableOpacity 
+                style={styles.sendButton}
+                onPress={handleSendMessage}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="send" size={16} color="#fff" />
+              </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       )}
 
       <Modal
@@ -484,6 +486,16 @@ export default function FriendGroupScreen() {
                 </View>
               )}
             />
+            <TouchableOpacity 
+              style={styles.leaveButton}
+              onPress={async () => {
+                await leaveGroup(groupName as string);
+                setShowMembersModal(false);
+                router.replace("/(tabs)/groups");
+              }}
+            >
+              <Text style={styles.leaveButtonText}>Leave Group</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -717,12 +729,11 @@ const styles = StyleSheet.create({
   chatContainer: {
     flex: 1,
     zIndex: 1,
-    pointerEvents: 'box-none',
   },
   chatMessages: {
     padding: 16,
     paddingTop: 8,
-    paddingBottom: 80,
+    paddingBottom: 16,
   },
   messageBubble: {
     backgroundColor: '#fff',
@@ -751,14 +762,12 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   inputContainer: {
-    position: 'absolute',
-    bottom: 16,
-    left: 12,
-    right: 12,
     backgroundColor: '#fff',
     borderRadius: 24,
     paddingHorizontal: 16,
     paddingVertical: 12,
+    marginHorizontal: 12,
+    marginBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
     shadowColor: '#000',
@@ -767,7 +776,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     zIndex: 100,
-    pointerEvents: 'box-none',
   },
   messageInput: {
     flex: 1,
@@ -813,6 +821,20 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5E5',
+  },
+  leaveButton: {
+    backgroundColor: '#FF3B30',
+    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    marginTop: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  leaveButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
   memberAvatar: {
     width: 50,
@@ -892,9 +914,9 @@ const styles = StyleSheet.create({
   },
   sendButton: {
     backgroundColor: '#007AFF',
-    borderRadius: 20,
-    width: 40,
-    height: 40,
+    borderRadius: 16,
+    width: 32,
+    height: 32,
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 8,

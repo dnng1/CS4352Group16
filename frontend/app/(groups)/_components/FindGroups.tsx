@@ -1,13 +1,27 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function FindGroups(props: any) {
   const{joined = {}, setJoin} = props;
+  
+  const handleJoin = async (groupId: number) => {
+    try {
+      const updated = { ...joined, [groupId]: true };
+      // Save to AsyncStorage first to ensure persistence
+      await AsyncStorage.setItem('joinedGroups', JSON.stringify(updated));
+      // Then update state
+      setJoin(updated);
+    } catch (error) {
+      console.error('Error joining group:', error);
+    }
+  };
   return (
     <View style={styles.container}>
       <ScrollView>
       <Text style={styles.subheading}>Groups That May Interest You</Text>
 
     {/*  Friend group 1*/}
+      {!joined[1] && (
       <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/10156/10156019.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
@@ -16,15 +30,17 @@ export default function FindGroups(props: any) {
                 <Text style={styles.desc}>Support group for international college students looking for mentorship and guidance</Text>
                 <Text style={styles.desc1}>Flexible meeting</Text>
             </View>
-            <TouchableOpacity style={[styles.joinButton, joined[1] ? styles.joinActive : styles.joinInactive]} onPress={() => setJoin((prev : any) => ({ ...prev, [1]: !prev[1]}))}>
+            <TouchableOpacity style={[styles.joinButton, joined[1] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(1)}>
                 <Text style={styles.buttonText}>
                     {joined[1] ? "Joined" : "Join"}
                 </Text>
             </TouchableOpacity>
         </View>
       </View>
+      )}
 
       {/*  Friend group 2*/}
+      {!joined[2] && (
       <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/3083/3083417.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
@@ -33,15 +49,17 @@ export default function FindGroups(props: any) {
                 <Text style={styles.desc}>Group of artists with passion for creating music, merging music from their hometowns</Text>
                 <Text style={styles.desc1}>Meets monthly</Text>
             </View>
-            <TouchableOpacity style={[styles.joinButton, joined[2] ? styles.joinActive : styles.joinInactive]} onPress={() => setJoin((prev :any) => ({ ...prev, [2]: !prev[2]}))}>
+            <TouchableOpacity style={[styles.joinButton, joined[2] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(2)}>
                 <Text style={styles.buttonText}>
                     {joined[2] ? "Joined" : "Join"}
                 </Text>
             </TouchableOpacity>
         </View>
       </View>
+      )}
 
       {/*  Friend group 3*/}
+      {!joined[3] && (
       <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/1027/1027128.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
@@ -50,15 +68,17 @@ export default function FindGroups(props: any) {
                 <Text style={styles.desc}>Chatting, cooking, and laughing. Food enthiusiasts sharing their culture</Text>
                 <Text style={styles.desc1}>Meets biweekly</Text>
             </View>
-            <TouchableOpacity style={[styles.joinButton, joined[3] ? styles.joinActive : styles.joinInactive]} onPress={() => setJoin((prev : any) => ({ ...prev, [3]: !prev[3]}))}>
+            <TouchableOpacity style={[styles.joinButton, joined[3] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(3)}>
                 <Text style={styles.buttonText}>
                     {joined[3] ? "Joined" : "Join"}
                 </Text>
             </TouchableOpacity>
         </View>
       </View>
+      )}
 
       {/*  Friend group 4*/}
+      {!joined[4] && (
       <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/1323/1323734.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
@@ -67,15 +87,17 @@ export default function FindGroups(props: any) {
                 <Text style={styles.desc}>Connect with other migrants to learn from each other's moving process and figure things out together</Text>
                 <Text style={styles.desc1}>Meets weekly</Text>
             </View>
-            <TouchableOpacity style={[styles.joinButton, joined[4] ? styles.joinActive : styles.joinInactive]} onPress={() => setJoin((prev : any) => ({ ...prev, [4]: !prev[4]}))}>
+            <TouchableOpacity style={[styles.joinButton, joined[4] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(4)}>
                 <Text style={styles.buttonText}>
                     {joined[4] ? "Joined" : "Join"}
                 </Text>
             </TouchableOpacity>
         </View>
       </View>
+      )}
 
       {/*  Friend group 5*/}
+      {!joined[5] && (
       <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/854/854894.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
@@ -84,13 +106,14 @@ export default function FindGroups(props: any) {
                 <Text style={styles.desc}>Visit must-see places in your local city with other newcomers</Text>
                 <Text style={styles.desc1}>Meets monthly</Text>
             </View>
-            <TouchableOpacity style={[styles.joinButton, joined[5] ? styles.joinActive : styles.joinInactive]} onPress={() => setJoin((prev : any) => ({ ...prev, [5]: !prev[5]}))}>
+            <TouchableOpacity style={[styles.joinButton, joined[5] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(5)}>
                 <Text style={styles.buttonText}>
                     {joined[5] ? "Joined" : "Join"}
                 </Text>
             </TouchableOpacity>
         </View>
       </View>
+      )}
 
     </ScrollView>
     </View>
