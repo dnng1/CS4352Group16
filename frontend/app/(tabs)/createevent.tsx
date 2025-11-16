@@ -216,7 +216,7 @@ export default function CreateEventScreen() {
           onPress={() => router.push("/(tabs)/home")}
           style={styles.backButton}
         >
-          <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
+          <Ionicons name="chevron-back" size={24} color="#000" />
           <Text style={styles.backButtonText}>Back</Text>
         </TouchableOpacity>
 
@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
   backButtonText: {
     fontSize: 18,
     fontWeight: "600",
-    color: COLORS.primary,
+    color: "#000",
   },
   title: {
     fontSize: 28,

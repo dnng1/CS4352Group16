@@ -8,6 +8,7 @@ import {
   ScrollView,
   Image,
   Alert,
+  StyleSheet,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -1010,46 +1011,29 @@ export default function App() {
           {currentStep === 0 ? (
             <TouchableOpacity
               onPress={() => router.push("/welcome")}
-              style={{ flexDirection: "row", alignItems: "center" }}
+              style={styles.backButton}
             >
-              <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontWeight: "600",
-                  color: COLORS.primary,
-                  marginLeft: 4,
-                }}
-              >
-                Back
-              </Text>
+              <Ionicons name="chevron-back" size={24} color="#000" />
+              <Text style={styles.backButtonText}>Back</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
               onPress={currentStep > 0 ? handleBack : undefined}
               disabled={currentStep === 0}
-              style={{ flexDirection: "row", alignItems: "center" }}
+              style={styles.backButton}
             >
               <Ionicons
                 name="chevron-back"
                 size={24}
-                color={currentStep > 0 ? COLORS.textPrimary : COLORS.disabled}
+                color={currentStep > 0 ? "#000" : COLORS.disabled}
               />
               <Text
-                style={{
-                  fontSize: 18,
-                  fontWeight: "600",
-                  color: currentStep > 0 ? COLORS.textPrimary : COLORS.disabled,
-                  marginLeft: 4,
-                }}
+                style={[
+                  styles.backButtonText,
+                  { color: currentStep > 0 ? "#000" : COLORS.disabled },
+                ]}
               >
-                {currentStep === 1
-                  ? "Personality Quiz"
-                  : currentStep === 2
-                  ? "Culture and Background"
-                  : currentStep === 3
-                  ? "Identity Confirmation"
-                  : "Summary"}
+                Back
               </Text>
             </TouchableOpacity>
           )}
@@ -1064,3 +1048,16 @@ export default function App() {
     </LinearGradient>
   );
 }
+
+const styles = StyleSheet.create({
+  backButton: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  backButtonText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#000",
+    marginLeft: 4,
+  },
+});

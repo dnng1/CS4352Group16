@@ -346,6 +346,7 @@ export default function FriendGroupScreen() {
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="chevron-back" size={24} color="#000" />
+          <Text style={styles.backButtonText}>Back</Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.titleContainer}
@@ -485,7 +486,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   backButton: {
+    flexDirection: "row",
+    alignItems: "center",
     padding: 8,
+  },
+  backButtonText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#000",
   },
   titleContainer: {
     flexDirection: 'row',
