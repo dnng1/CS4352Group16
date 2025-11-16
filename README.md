@@ -10,10 +10,10 @@ Mobile app for international migrants struggling to find a support system or loo
 
 ## Tech Stack
 - React Native
-- Expo
+- Expo (SDK Version: 54.0.18)
  
 ## Requirements
-- Expo Go (download from playstore or app store)
+- Expo Go (Download from the App Store or Google Play)
 
 ## Installation
 - git clone https://github.com/dnng1/CS4352Group16.git
@@ -27,7 +27,7 @@ Mobile app for international migrants struggling to find a support system or loo
 - Scan the given QR code through the expo go app (if using android) or camera app (if using ios) 
 
 ## Limitations
-- no backend yet
+- No backend yet
 - lacks database for user info and group details
 
 ## Future Implementations
