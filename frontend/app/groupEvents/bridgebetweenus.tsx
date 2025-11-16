@@ -51,7 +51,7 @@ const newEvents = [
   },
    {
     id: 23,
-    title: "Tea party - talk about budegting tips",
+    title: "Tea party - talk about budgeting tips",
     location: "Online",
     time: "1:00 pm - 2:00 pm",
     date: "Jan 2nd",
