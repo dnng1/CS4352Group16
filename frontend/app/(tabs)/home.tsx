@@ -64,12 +64,22 @@ export default function Dashboard() {
   const [joinedEventIds, setJoinedEventIds] = useState<number[]>([]);
 
   const searchFilter = useMemo(() => {
-  const searched = search.toUpperCase();
-  return events.filter(eventlist => 
-  eventlist.event.toUpperCase().includes(searched) || eventlist.location.toUpperCase().includes(searched) || eventlist.date.toUpperCase().includes(searched)
-  ); 
-  
-}, [search, events])
+    if (!search.trim()) {
+      return events;
+    }
+    const searched = search.toUpperCase();
+    return events.filter(eventlist => {
+      const eventName = (eventlist.event || '').toUpperCase();
+      const location = (eventlist.location || '').toUpperCase();
+      const date = formatDateRange(eventlist).toUpperCase();
+      const time = formatTimeRange(eventlist).toUpperCase();
+      
+      return eventName.includes(searched) || 
+             location.includes(searched) || 
+             date.includes(searched) ||
+             time.includes(searched);
+    }); 
+  }, [search, events])
   // Load events from AsyncStorage when screen is focused
   useFocusEffect(
     React.useCallback(() => {
@@ -129,8 +139,22 @@ export default function Dashboard() {
       <Text style={styles.heading}>Home</Text>
       <TextInput style={styles.searchBar} placeholder="Search" value={search} onChangeText={setSearch}/>
       <Text style={styles.subheading}>My Upcoming Events</Text>
+      {/* Always show default events */}
       {defaultEvents
-        .filter(ev => joinedEventIds.includes(ev.id))
+        .filter(ev => {
+          // Apply search filter to default events
+          if (!search.trim()) return true;
+          const searched = search.toUpperCase();
+          const eventName = (ev.event || '').toUpperCase();
+          const location = (ev.location || '').toUpperCase();
+          const date = formatDateRange(ev).toUpperCase();
+          const time = formatTimeRange(ev).toUpperCase();
+          
+          return eventName.includes(searched) || 
+                 location.includes(searched) || 
+                 date.includes(searched) ||
+                 time.includes(searched);
+        })
         .map(ev => (
           <View key= {ev.id} style={styles.card}>
             <Image source ={{ uri: ev.image }} style={styles.image} />
@@ -139,8 +163,10 @@ export default function Dashboard() {
             <Text style={styles.eventDetails}>{formatDateRange(ev)}</Text>
             <Text style={[styles.eventDetails, {marginBottom: 10}]}>{ev.location}</Text>
           </View>
-        ))}
-      {events
+        ))
+      }
+      {/* Show joined events from storage */}
+      {searchFilter
         .filter(ev => joinedEventIds.includes(ev.id)) //only show joined
         .map(ev => (
           <View key= {ev.id} style={styles.card}>

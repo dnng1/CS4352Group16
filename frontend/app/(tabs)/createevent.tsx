@@ -239,7 +239,11 @@ export default function CreateEventScreen() {
             onDayPress={handleDateSelect}
             markedDates={getMarkedDates()}
             markingType="period"
-            minDate={new Date().toISOString().split("T")[0]}
+            minDate={(() => {
+              const today = new Date();
+              today.setDate(today.getDate() - 1);
+              return today.toISOString().split("T")[0];
+            })()}
             style={styles.calendar}
             theme={{
               backgroundColor: COLORS.background,
