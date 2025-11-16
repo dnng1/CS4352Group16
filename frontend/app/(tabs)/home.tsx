@@ -4,15 +4,11 @@ import { useRouter, useFocusEffect } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getJoinedEventIds } from "../../utils/eventstorage";
+import { resetStorage } from '@/utils/appStartup';
 
-useEffect(() => {
-  const resetEvents = async () => {
-    await AsyncStorage.removeItem("events");
-    await AsyncStorage.removeItem("joinedEventIds");
-    console.log("Event storage reset on app start");
-  };
-
-  resetEvents();
+useEffect(() => 
+{
+  resetStorage();
 }, []);
 
 const defaultEvents = [
