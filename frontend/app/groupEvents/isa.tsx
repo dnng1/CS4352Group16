@@ -66,7 +66,7 @@ const upcomingEvents = [
     isGoing: null,
   },
   {
-    id: 6,
+    id: 14,
     title: "Group Study Session",
     location: "ABC 123 S Univ Rd, Fantasy World, JA",
     time: "9:00 am - 12:00 pm",
@@ -78,7 +78,7 @@ const upcomingEvents = [
 
 const previousEvents = [
   {
-    id: 7,
+    id: 15,
     title: "Group Study Session",
     location: "ABC 123 S Univ Rd, Fantasy World, JA",
     time: "9:00 am - 12:00 pm",
