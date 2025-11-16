@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
 import MyGroups from "./_components/MyGroups";
 import FindGroups from "./_components/FindGroups";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from "expo-router";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Groups() {
   const router = useRouter();
@@ -17,6 +17,24 @@ export default function Groups() {
     4: false, 
     5: false
   });
+
+  useEffect (() => {
+    const savedGroups = async () => {
+      const saved = await AsyncStorage.getItem('joinedGroups');
+      if(saved){
+        setJoin(JSON.parse(saved));
+      }
+    }; 
+    savedGroups();
+  }, []);
+
+    useEffect (() => {
+    const saveGroups = async () => {
+      await AsyncStorage.setItem('joinedGroups', JSON.stringify(joined));
+    }; 
+    saveGroups();
+  }, [joined]);
+
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>

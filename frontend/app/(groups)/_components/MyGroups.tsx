@@ -13,7 +13,7 @@ export default function MyGroups(props: any) {
         onPress={() => router.push({ pathname: "/groupEvents/welcomewonders", params: { groupName: "Welcome Wonders" } })}>        
         <Image source={{ uri: "https://cdn-icons-png.flaticon.com/512/25/25437.png" }} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
-                <View style={{ flexDirection: "column" }}>
+                <View style={{ flexDirection: "column", flexShrink: 1 }}>
                   <Text style={styles.groupName}>Welcome Wonders</Text>
                   <View style={{ flexDirection: "row", marginLeft: 20, marginTop: 5 }}>
                     <Image source={{ uri: "https://cdn-icons-png.flaticon.com/128/14026/14026550.png" }} style={styles.online}></Image>
@@ -31,7 +31,7 @@ export default function MyGroups(props: any) {
         onPress={() => router.push({ pathname: "/groupEvents/isa", params: { groupName: "International Student Association" } })}>        
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/10156/10156019.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
-                <View style={{ flexDirection: "column" }}>
+                <View style={{ flexDirection: "column", flexShrink: 1 }}>
           <Text style={styles.groupName}>International Student Association</Text>
           <View style={{ flexDirection: "row", marginLeft: 20, marginTop: 5 }}>
           <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/14026/14026550.png"}} style={styles.online}></Image>
@@ -50,7 +50,7 @@ export default function MyGroups(props: any) {
         onPress={() => router.push({ pathname: "/groupEvents/musicalwonders", params: { groupName: "Town Travellers" } })}>        
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/3083/3083417.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
-            <View style={{ flexDirection: "column"}}>
+            <View style={{ flexDirection: "column", flexShrink: 1}}>
           <Text style={styles.groupName}>Musical Wonders</Text>
           <View style={{ flexDirection: "row", marginLeft: 20, marginTop: 5}}>
             <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/14026/14026550.png"}} style={styles.online}></Image>
@@ -69,7 +69,7 @@ export default function MyGroups(props: any) {
         onPress={() => router.push({ pathname: "/groupEvents/cookingninjas", params: { groupName: "Cooking Ninjas" } })}>        
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/1027/1027128.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
-            <View style={{ flexDirection: "column"}}>
+            <View style={{ flexDirection: "column", flexShrink: 1}}>
           <Text style={styles.groupName}>Cooking Ninjas</Text>
           <View style={{ flexDirection: "row", marginLeft: 20, marginTop: 5}}>
             <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/14026/14026550.png"}} style={styles.online}></Image>
@@ -88,7 +88,7 @@ export default function MyGroups(props: any) {
         onPress={() => router.push({ pathname: "/groupEvents/bridgebetweenus", params: { groupName: "Bridge Between Us" } })}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/1323/1323734.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
-            <View style={{ flexDirection: "column"}}>
+            <View style={{ flexDirection: "column", flexShrink: 1}}>
           <Text style={styles.groupName}>Bridge Between Us</Text>
           <View style={{ flexDirection: "row", marginLeft: 20, marginTop: 5}}>
             <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/14026/14026550.png"}} style={styles.online}></Image>
@@ -107,7 +107,7 @@ export default function MyGroups(props: any) {
         onPress={() => router.push({ pathname: "/groupEvents/towntravellers", params: { groupName: "Town Travellers" } })}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/854/854894.png"}} style={styles.profileImage}></Image>
         <View style={styles.cardRow}>
-            <View style={{ flexDirection: "column"}}>
+            <View style={{ flexDirection: "column", flexShrink: 1}}>
           <Text style={styles.groupName}>Town Travellers</Text>
           <View style={{ flexDirection: "row", marginLeft: 20, marginTop: 5}}>
             <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/14026/14026550.png"}} style={styles.online}></Image>
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
 cardRow: {
         flexDirection: "row", 
         flex: 1, 
-        alignItems: "flex-end", 
+        alignItems: "center", 
         justifyContent: "space-between",
         marginEnd: 20
     },

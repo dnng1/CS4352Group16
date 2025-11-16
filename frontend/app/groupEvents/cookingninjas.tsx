@@ -61,6 +61,7 @@ const upcomingEvents = [
 
 const previousEvents = [
   {
+    id: 1
     
   },
 ];
