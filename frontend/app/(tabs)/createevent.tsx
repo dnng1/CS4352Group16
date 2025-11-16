@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const COLORS = {
   primary: "#7CA7D9",
@@ -10,6 +11,15 @@ const COLORS = {
   textPrimary: "#000000",
   textSecondary: "#444444",
   background: "#FFFFFF",
+};
+
+const groupMapping: { [key: number]: { id: string; name: string } } = {
+  0: { id: "0", name: "Welcome Wonders" },
+  1: { id: "1", name: "International Student Association" },
+  2: { id: "2", name: "Musical Wonders" },
+  3: { id: "3", name: "Cooking Ninjas" },
+  4: { id: "4", name: "Bridge Between Us" },
+  5: { id: "5", name: "Town Travellers" },
 };
 
 export default function CreateEventScreen() {
@@ -20,12 +30,29 @@ export default function CreateEventScreen() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
-  
+  const [groups, setGroups] = useState<{ id: string; name: string }[]>([]);
 
-  const groups = [
-    { id: "1", name: "Friend Group 1" },
-    { id: "2", name: "Friend Group 3" },
-  ];
+  useEffect(() => {
+    const loadJoinedGroups = async () => {
+      try {
+        const saved = await AsyncStorage.getItem('joinedGroups');
+        if (saved) {
+          const joinedGroups = JSON.parse(saved);
+          const userGroups = Object.keys(joinedGroups)
+            .filter(key => joinedGroups[parseInt(key)] === true)
+            .map(key => groupMapping[parseInt(key)])
+            .filter(Boolean);
+          setGroups(userGroups);
+        } else {
+          setGroups([groupMapping[0]]);
+        }
+      } catch (error) {
+        console.error('Error loading joined groups:', error);
+        setGroups([groupMapping[0]]);
+      }
+    };
+    loadJoinedGroups();
+  }, []);
 
   const handleDateSelect = (day: any) => {
     if (!startDate || (startDate && endDate)) {

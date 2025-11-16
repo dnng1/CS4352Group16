@@ -129,25 +129,27 @@ export default function Dashboard() {
       <Text style={styles.heading}>Home</Text>
       <TextInput style={styles.searchBar} placeholder="Search" value={search} onChangeText={setSearch}/>
       <Text style={styles.subheading}>My Upcoming Events</Text>
-      {defaultEvents.map(ev => (
-        <View key= {ev.id} style={styles.card}>
-          <Image source ={{ uri: ev.image }} style={styles.image} />
+      {defaultEvents
+        .filter(ev => joinedEventIds.includes(ev.id))
+        .map(ev => (
+          <View key= {ev.id} style={styles.card}>
+            <Image source ={{ uri: ev.image }} style={styles.image} />
             <Text style={styles.eventName}>{ev.event}</Text>
             <Text style={styles.eventDetails}>{formatTimeRange(ev)}</Text>
             <Text style={styles.eventDetails}>{formatDateRange(ev)}</Text>
             <Text style={[styles.eventDetails, {marginBottom: 10}]}>{ev.location}</Text>
-        </View>
-      ))}
+          </View>
+        ))}
       {events
         .filter(ev => joinedEventIds.includes(ev.id)) //only show joined
         .map(ev => (
-                  <View key= {ev.id} style={styles.card}>
-          <Image source ={{ uri: ev.image }} style={styles.image} />
+          <View key= {ev.id} style={styles.card}>
+            <Image source ={{ uri: ev.image }} style={styles.image} />
             <Text style={styles.eventName}>{ev.event}</Text>
             <Text style={styles.eventDetails}>{formatTimeRange(ev)}</Text>
             <Text style={styles.eventDetails}>{formatDateRange(ev)}</Text>
             <Text style={[styles.eventDetails, {marginBottom: 10}]}>{ev.location}</Text>
-        </View>
+          </View>
         ))
       }
     </ScrollView>

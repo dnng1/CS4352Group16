@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import MyGroups from "./_components/MyGroups";
 import FindGroups from "./_components/FindGroups";
 import { useState, useEffect } from 'react';
@@ -36,64 +37,107 @@ export default function Groups() {
   }, [joined]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerRow}>
-              <View style={styles.profileContainer}>
-                <TouchableOpacity
-                  style={styles.profileButton}
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                  onPress={() => setMenuOpen(!menuOpen)}
-                >
-                  <View style={styles.profileCircle}>
-                    <Text style={styles.profileInitials}>U</Text>
-                  </View>
-                </TouchableOpacity>
-                {menuOpen && (
-                  <View style={styles.menuInFlow} pointerEvents="auto">
-                    <TouchableOpacity
-                      style={styles.menuItem}
-                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                      onPress={() => { setMenuOpen(false); router.replace('/welcome'); }}
-                    >
-                      <Text style={styles.menuText}>Sign out</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              </View>
+    <SafeAreaView style={styles.container} edges={[]}>
+      <View style={styles.header}>
+        <View style={styles.placeholder} />
+        <View style={styles.titleContainer}>
+          <Text style={styles.headerTitle}>Groups</Text>
+        </View>
+        <View style={styles.profileContainer}>
+          <TouchableOpacity
+            style={styles.profileButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            onPress={() => setMenuOpen(!menuOpen)}
+          >
+            <View style={styles.profileCircle}>
+              <Text style={styles.profileInitials}>U</Text>
             </View>
-          <ScrollView>
-            <Text style={styles.heading}>Groups</Text>
-            <View style={styles.toggle}>
-            <TouchableOpacity style={[styles.mygroupsButton, toggle === "mygroups" ? styles.active : styles.inactive]} onPress={() => setToggle("mygroups")}>
-              <Text style={styles.buttonText}> My Groups </Text>
-            </TouchableOpacity>
-              <TouchableOpacity style={[styles.findgroupsButton, toggle === "findgroups" ? styles.active : styles.inactive]} onPress={() => setToggle("findgroups")}>
-              <Text style={styles.buttonText}> Find Groups </Text>
-            </TouchableOpacity>
+          </TouchableOpacity>
+          {menuOpen && (
+            <View style={styles.menuInFlow} pointerEvents="auto">
+              <TouchableOpacity
+                style={styles.menuItem}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                onPress={() => { setMenuOpen(false); router.replace('/welcome'); }}
+              >
+                <Text style={styles.menuText}>Sign out</Text>
+              </TouchableOpacity>
             </View>
-            {toggle === "mygroups" ? <MyGroups joined={joined}/> : <FindGroups joined={joined} setJoin={setJoin}/>}
-          </ScrollView>
+          )}
+        </View>
       </View>
+
+      <View style={styles.toggleBar}>
+        <TouchableOpacity
+          style={[
+            styles.toggleButton,
+            { borderTopLeftRadius: 20, borderBottomLeftRadius: 20 },
+            toggle === "mygroups" && styles.toggleButtonActive
+          ]}
+          onPress={() => setToggle("mygroups")}
+        >
+          <Text style={[styles.toggleText, toggle === "mygroups" && styles.toggleTextActive]}>
+            My Groups
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.toggleButton,
+            { borderTopRightRadius: 20, borderBottomRightRadius: 20 },
+            toggle === "findgroups" && styles.toggleButtonActive
+          ]}
+          onPress={() => setToggle("findgroups")}
+        >
+          <Text style={[styles.toggleText, toggle === "findgroups" && styles.toggleTextActive]}>
+            Find Groups
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.bodyContainer}>
+        <ScrollView style={styles.scrollView}>
+          {toggle === "mygroups" ? <MyGroups joined={joined}/> : <FindGroups joined={joined} setJoin={setJoin}/>}
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
- container: { 
-    flex: 1, 
-    justifyContent: "center", 
-    padding: 20, 
-    },
-      headerRow: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "center",
+  container: {
+    flex: 1,
+    backgroundColor: '#E6F4FE',
+  },
+  header: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  placeholder: {
+    width: 40,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    fontStyle: 'italic',
+    color: '#000',
   },
   profileContainer: {
     position: "relative",
     height: 44,
   },
   profileButton: {
-    paddingTop: 10,
+    padding: 8,
   },
   profileCircle: {
     width: 36,
@@ -134,58 +178,44 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#111827",
   },
-
-    heading: {
-      fontSize: 28, 
-      textAlign: "center",
-      marginBottom: 10, 
-    },
-
-    toggle: {
-      flexDirection: "row",
-      justifyContent: "center",
-      borderWidth: 1, 
-      borderColor: "black", 
-      borderRadius: 20,
-      alignSelf: "center", 
-      width: "50%",
-      marginVertical: 10
-    },
-
-    mygroupsButton: {
-      flex: 1, 
-      borderBottomLeftRadius: 20,
-      borderTopLeftRadius: 20,
-      borderBottomRightRadius: 0,
-      borderTopRightRadius: 0,
-      padding: 6,
-      paddingLeft: 10,
-      borderRightWidth: 1,
-      borderRightColor: "black",
-      alignItems: "center"
-    },
-
-    findgroupsButton: {
-      flex: 1,
-      borderBottomRightRadius: 20,
-      borderTopRightRadius: 20,
-      borderBottomLeftRadius: 0,
-      borderTopLeftRadius: 0,
-      padding: 6, 
-      paddingRight: 10,
-      alignItems: "center"
-    },
-
-    buttonText: {
-      color: "black",
-      fontSize: 12
-    }, 
-
-    active: {
-      backgroundColor: "#7CA7D9"
-    },
-
-    inactive: {
-      backgroundColor: ""
-    }
+  toggleBar: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    marginHorizontal: 16,
+    marginTop: -20,
+    marginBottom: 8,
+    borderRadius: 20,
+    padding: 0,
+    zIndex: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+    overflow: 'hidden',
+  },
+  toggleButton: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: 'center',
+    backgroundColor: '#F5F5F5',
+  },
+  toggleButtonActive: {
+    backgroundColor: '#007AFF',
+  },
+  toggleText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#000',
+  },
+  toggleTextActive: {
+    color: '#fff',
+  },
+  bodyContainer: {
+    flex: 1,
+    backgroundColor: '#E6F4FE',
+  },
+  scrollView: {
+    paddingHorizontal: 20,
+  },
 });

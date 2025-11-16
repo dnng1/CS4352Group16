@@ -116,12 +116,16 @@ export default function CreateEventDetailsScreen() {
         : [];
       
       // Get group names for display
-      const groups = [
-        { id: "1", name: "Friend Group 1" },
-        { id: "2", name: "Friend Group 3" },
-      ];
+      const groupMapping: { [key: string]: string } = {
+        "0": "Welcome Wonders",
+        "1": "International Student Association",
+        "2": "Musical Wonders",
+        "3": "Cooking Ninjas",
+        "4": "Bridge Between Us",
+        "5": "Town Travellers",
+      };
       const groupNames = selectedGroups
-        .map((groupId: string) => groups.find(g => g.id === groupId)?.name)
+        .map((groupId: string) => groupMapping[groupId])
         .filter(Boolean)
         .join(", ");
 
