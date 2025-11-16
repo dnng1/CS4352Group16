@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import { clearCacheAndResetToDefault } from "../utils/appStartup";
 
 const COLORS = {
   background: "#FFFFFF",
@@ -12,6 +13,11 @@ const COLORS = {
 
 export default function WelcomeScreen() {
   const router = useRouter();
+
+  // Clear cache and reset to defaults when app starts
+  useEffect(() => {
+    clearCacheAndResetToDefault();
+  }, []);
 
   return (
     <ImageBackground
