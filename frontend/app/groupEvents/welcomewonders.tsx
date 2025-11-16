@@ -71,11 +71,7 @@ const upcomingEvents = [
   },
 ];
 
-const previousEvents = [
-  {
-    
-  },
-];
+const previousEvents: any[] = [];
 
 const defaultChatMessages: Array<{ id: number; sender: string; message?: string; image?: string; time: string; type: 'text' | 'image' }> = [];
 

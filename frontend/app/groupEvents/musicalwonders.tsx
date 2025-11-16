@@ -77,9 +77,7 @@ const upcomingEvents = [
   },
 ];
 
-const previousEvents = [
-{},
-];
+const previousEvents: any[] = [];
 
 const defaultChatMessages: Array<{ id: number; sender: string; message?: string; image?: string; time: string; type: 'text' | 'image' }> = [
   { id: 1, sender: "John Doe", message: "Hey everyone! Can yall provide song suggestions for an international festival? ", time: "10:30 AM", type: 'text' },

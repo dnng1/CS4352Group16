@@ -274,7 +274,7 @@ export default function FriendGroupScreen() {
           <View style={styles.eventActions}>
             <TouchableOpacity
               style={[styles.actionButton, isGoing === false && styles.actionButtonActive, { marginRight: 8 }]}
-              onPress={() => handleEventResponse(event.id, false)}
+              onPress={() => handleEventResponse(event.id, false, event)}
             >
               <Ionicons 
                 name="close" 
@@ -284,7 +284,7 @@ export default function FriendGroupScreen() {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.actionButton, isGoing === true && styles.actionButtonActive]}
-              onPress={() => handleEventResponse(event.id, true)}
+              onPress={() => handleEventResponse(event.id, true, event)}
             >
               <Ionicons 
                 name="checkmark" 
