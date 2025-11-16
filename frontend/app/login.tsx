@@ -22,8 +22,8 @@ export default function LoginScreen() {
       setEmailError("Email must contain @");
       return false;
     }
-    if (!email.includes('.com')) {
-      setEmailError("Email must contain .com");
+    if (!(email.includes('.com') || (email.includes('.edu')) || (email.includes('.org')) || (email.includes('.net')))) {
+      setEmailError("Invalid email");
       return false;
     }
     setEmailError("");
