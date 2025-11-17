@@ -88,7 +88,7 @@ Allows users to create a custom social event.
 2. Post event 
 
 ## Demonstration
-* Video Link: 
+* Video Link: https://www.youtube.com/shorts/72CBEaOlbK0
 
 ## Limitations
 * We don't have a backend or database for user IDs and passwords, events, and groups. Everything is currently hardcoded
