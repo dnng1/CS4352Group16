@@ -19,7 +19,11 @@ export default function FindGroups(props: any) {
     <View style={styles.container}>
       <ScrollView>
       <Text style={styles.subheading}>Groups That May Interest You</Text>
-
+    {(!joined[1] || !joined[4]) && (
+          <Text style={styles.subsubheading1}>Support Systems</Text>
+          
+        )}
+    
     {/*  Friend group 1*/}
       {!joined[1] && (
       <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
@@ -39,7 +43,27 @@ export default function FindGroups(props: any) {
       </View>
       )}
 
-      {/*  Friend group 2*/}
+      {/*  Friend group 4*/}
+      {!joined[4] && (
+      <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
+        <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/1323/1323734.png"}} style={styles.profileImage}></Image>
+        <View style={styles.cardRow}>
+            <View style={{flexDirection: "column", flex: 1, flexShrink:1}}>
+                <Text style={styles.groupName}>Bridge Between Us </Text>
+                <Text style={styles.desc}>Connect with other migrants to learn from each other's moving process and figure logistics out together</Text>
+                <Text style={styles.desc1}>Meets weekly</Text>
+            </View>
+            <TouchableOpacity style={[styles.joinButton, joined[4] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(4)}>
+                <Text style={styles.buttonText}>
+                    {joined[4] ? "Joined" : "Join"}
+                </Text>
+            </TouchableOpacity>
+        </View>
+      </View>
+      )}
+{(!joined[2] || !joined[3]) && (
+      <Text style={styles.subsubheading2}>Hobbies & Culture</Text>
+    )}            {/*  Friend group 2*/}
       {!joined[2] && (
       <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/3083/3083417.png"}} style={styles.profileImage}></Image>
@@ -65,7 +89,7 @@ export default function FindGroups(props: any) {
         <View style={styles.cardRow}>
             <View style={{flexDirection: "column", flex: 1, flexShrink:1}}>
                 <Text style={styles.groupName}>Cooking Ninjas </Text>
-                <Text style={styles.desc}>Chatting, cooking, and laughing. Food enthiusiasts sharing their culture</Text>
+                <Text style={styles.desc}>Chatting, cooking, and laughing. Share and learn about various cultures through food</Text>
                 <Text style={styles.desc1}>Meets biweekly</Text>
             </View>
             <TouchableOpacity style={[styles.joinButton, joined[3] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(3)}>
@@ -77,26 +101,10 @@ export default function FindGroups(props: any) {
       </View>
       )}
 
-      {/*  Friend group 4*/}
-      {!joined[4] && (
-      <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
-        <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/1323/1323734.png"}} style={styles.profileImage}></Image>
-        <View style={styles.cardRow}>
-            <View style={{flexDirection: "column", flex: 1, flexShrink:1}}>
-                <Text style={styles.groupName}>Bridge Between Us </Text>
-                <Text style={styles.desc}>Connect with other migrants to learn from each other's moving process and figure things out together</Text>
-                <Text style={styles.desc1}>Meets weekly</Text>
-            </View>
-            <TouchableOpacity style={[styles.joinButton, joined[4] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(4)}>
-                <Text style={styles.buttonText}>
-                    {joined[4] ? "Joined" : "Join"}
-                </Text>
-            </TouchableOpacity>
-        </View>
-      </View>
-      )}
-
-      {/*  Friend group 5*/}
+{!joined[5]&& (
+      <Text style={styles.subsubheading3}>Travel & Adventure</Text>
+      
+    )}      {/*  Friend group 5*/}
       {!joined[5] && (
       <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/854/854894.png"}} style={styles.profileImage}></Image>
@@ -191,7 +199,27 @@ const styles = StyleSheet.create({
     marginBottom: 20, 
     fontWeight: "600", 
   },
-
+  subsubheading1 : {
+    fontSize: 14, 
+    marginBottom: 20, 
+    fontWeight: 700,
+    color: "#6e8cf9ff",
+    textAlign: "center"
+  },
+  subsubheading2: {
+    fontSize: 14, 
+    marginBottom: 20, 
+    fontWeight: 700,
+    color: "green",
+    textAlign: "center"
+  },
+  subsubheading3: {
+    fontSize: 14, 
+    marginBottom: 20, 
+    fontWeight: 700,
+    color: "#ffaf6eff",
+    textAlign: "center"
+  },
   card: {
     borderRadius: 15, 
     marginBottom: 30, 

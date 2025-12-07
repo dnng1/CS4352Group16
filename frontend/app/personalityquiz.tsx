@@ -156,6 +156,24 @@ export default function App() {
   const question = personalityQuestions[currentQuestion];
   const totalQuestions = personalityQuestions.length;
 
+  const [submitted, setSubmitted] = useState(false);
+  const [submitted2, setSubmitted2] = useState(false);
+  const [submitted3, setSubmitted3] = useState(false);
+
+const [profileError, setProfileError] = useState("")
+  const validatePhoto = (): boolean => {
+    if(!profileImage) {
+      setProfileError("Please upload a photo");
+      return false;
+    }
+    else{
+      setProfileError("");
+      return true;
+    }
+  }
+
+
+
   // Check if we should show summary page from route params
   useEffect(() => {
     if (params.step === 'summary') {
@@ -164,7 +182,8 @@ export default function App() {
   }, [params.step]);
 
   const handleUserInfoNext = () => {
-    if (userInfo.fullName && userInfo.phoneNumber && userInfo.location) {
+    setSubmitted(true);
+    if (userInfo.fullName.trim() && userInfo.phoneNumber.trim() && userInfo.location.trim()) {
       setCurrentStep(1);
     } else {
       Alert.alert("Missing Information", "Please fill in all fields");
@@ -224,7 +243,8 @@ export default function App() {
   };
 
   const handleCultureNext = () => {
-    if (cultureInfo.homeCountry && cultureInfo.languages && cultureInfo.timeInCountry && 
+    setSubmitted2(true);
+    if (cultureInfo.homeCountry && cultureInfo.timeInCountry && 
         cultureInfo.reasonForComing && cultureInfo.supportLookingFor.length > 0 && cultureInfo.importantTraditions) {
       setCurrentStep(3);
     } else {
@@ -246,7 +266,9 @@ export default function App() {
   };
 
   const handleImageNext = () => {
-    if (profileImage) {
+    const validationPassed = validatePhoto();
+    setSubmitted3(true);
+    if (validationPassed) {
       setCurrentStep(4);
     } else {
       Alert.alert("Missing Image", "Please upload a profile image first");
@@ -319,12 +341,19 @@ export default function App() {
             <TextInput
               style={{
                 borderWidth: 1,
-                borderColor: COLORS.border,
+                borderColor: 
+                submitted && (
+                (field === "Full Name" && !userInfo.fullName.trim()) ||
+                (field === "Phone Number" && !userInfo.phoneNumber.trim()) ||
+                (field === "Location" && !userInfo.location.trim())
+                )
+                ? "red" : COLORS.border,
                 backgroundColor: "#fff",
                 padding: 15,
                 borderRadius: 12,
                 fontSize: 16,
               }}
+              
               placeholder={`Enter your ${field.toLowerCase()}`}
               placeholderTextColor="#999"
               value={
@@ -346,7 +375,15 @@ export default function App() {
               }
               keyboardType={field === "Phone Number" ? "phone-pad" : "default"}
             />
+            {submitted && (
+                (field === "Full Name" && !userInfo.fullName.trim()) ||
+                (field === "Phone Number" && !userInfo.phoneNumber.trim()) ||
+                (field === "Location" && !userInfo.location.trim())
+                ) && (
+              <Text style={{color: "red", marginTop: 8}}>Required</Text>
+            )}
           </View>
+          
         ))}
 
         <TouchableOpacity
@@ -506,7 +543,7 @@ export default function App() {
             <TextInput
               style={{
                 borderWidth: 1,
-                borderColor: COLORS.border,
+                borderColor: submitted2 && !cultureInfo.homeCountry ? "red": COLORS.border,
                 backgroundColor: "#fff",
                 padding: 15,
                 borderRadius: 12,
@@ -515,10 +552,14 @@ export default function App() {
               placeholder="Enter your home country"
               placeholderTextColor="#999"
               value={cultureInfo.homeCountry}
-              onChangeText={(text) =>
-                setCultureInfo({ ...cultureInfo, homeCountry: text })
+              onChangeText={(text) =>{
+              setCultureInfo({ ...cultureInfo, homeCountry: text });
+            }
               }
             />
+             {submitted2 && !cultureInfo.homeCountry && (
+              <Text style={{color: "red", marginTop: 8}}>Required</Text>
+            )}
           </View>
 
           <View style={{ marginBottom: 20 }}>
@@ -535,7 +576,7 @@ export default function App() {
             <TextInput
               style={{
                 borderWidth: 1,
-                borderColor: COLORS.border,
+                borderColor: submitted2 && !cultureInfo.languages ? "red": COLORS.border,
                 backgroundColor: "#fff",
                 padding: 15,
                 borderRadius: 12,
@@ -547,9 +588,12 @@ export default function App() {
                 setCultureInfo({ ...cultureInfo, languages: text })
               }
             />
+            {submitted2 && !cultureInfo.languages && (
+              <Text style={{color: "red", marginTop: 8}}>Required</Text>
+            )}
           </View>
 
-          <View style={{ marginBottom: 20 }}>
+          <View style={[styles.multipleSelectBorder, {borderColor: submitted2 && cultureInfo.timeInCountry.length === 0 ? "red" : "transparent"}]}>
             <Text
               style={{
                 fontSize: 16,
@@ -589,6 +633,9 @@ export default function App() {
                 </TouchableOpacity>
               );
             })}
+             {submitted2 && !cultureInfo.timeInCountry && (
+              <Text style={{color: "red", marginTop: 8}}>Required</Text>
+            )}
           </View>
 
           <View style={{ marginBottom: 20 }}>
@@ -605,7 +652,7 @@ export default function App() {
             <TextInput
               style={{
                 borderWidth: 1,
-                borderColor: COLORS.border,
+                borderColor: submitted2 && !cultureInfo.reasonForComing ? "red": COLORS.border,
                 backgroundColor: "#fff",
                 padding: 15,
                 borderRadius: 12,
@@ -621,9 +668,12 @@ export default function App() {
               }
               multiline
             />
+            {submitted2 && !cultureInfo.reasonForComing && (
+              <Text style={{color: "red", marginTop: 8}}>Required</Text>
+            )}
           </View>
 
-          <View style={{ marginBottom: 20 }}>
+          <View style={[styles.multipleSelectBorder, {borderColor: submitted2 && cultureInfo.supportLookingFor.length === 0 ? "red" : "transparent"}]}>
             <Text
               style={{
                 fontSize: 16,
@@ -673,6 +723,9 @@ export default function App() {
                 </TouchableOpacity>
               );
             })}
+             {submitted2 && !cultureInfo.supportLookingFor && (
+              <Text style={{color: "red", marginTop: 8}}>Required</Text>
+            )}
           </View>
 
           <View style={{ marginBottom: 30 }}>
@@ -689,22 +742,27 @@ export default function App() {
             <TextInput
               style={{
                 borderWidth: 1,
-                borderColor: COLORS.border,
+                borderColor: submitted2 && !cultureInfo.importantTraditions ? "red": COLORS.border,
                 backgroundColor: "#fff",
                 padding: 15,
                 borderRadius: 12,
                 fontSize: 16,
                 minHeight: 80,
                 textAlignVertical: "top",
+                flexDirection: "row"
               }}
               placeholder="Tell us about traditions that matter to you"
               placeholderTextColor="#999"
               value={cultureInfo.importantTraditions}
-              onChangeText={(text) =>
-                setCultureInfo({ ...cultureInfo, importantTraditions: text })
-              }
+              onChangeText={(text) => {
+                setCultureInfo({ ...cultureInfo, importantTraditions: text });
+              }}
               multiline
+              
             />
+            {submitted2 && !cultureInfo.importantTraditions && (
+              <Text style={{color: "red", marginTop: 8}}>Required</Text>
+            )}
           </View>
 
           <TouchableOpacity
@@ -727,6 +785,7 @@ export default function App() {
               Continue to Identity Confirmation →
             </Text>
           </TouchableOpacity>
+          
         </View>
       </ScrollView>
     );
@@ -755,7 +814,6 @@ export default function App() {
         >
           Please upload a photo to confirm your identity
         </Text>
-
         <View style={{ alignItems: "center", marginBottom: 40 }}>
           <TouchableOpacity
             onPress={pickImage}
@@ -765,7 +823,7 @@ export default function App() {
               borderRadius: 75,
               backgroundColor: COLORS.secondary,
               borderWidth: 2,
-              borderColor: COLORS.border,
+              borderColor: submitted3 && profileError ? "red" : COLORS.border,
               borderStyle: "dashed",
               justifyContent: "center",
               alignItems: "center",
@@ -791,6 +849,9 @@ export default function App() {
               </View>
             )}
           </TouchableOpacity>
+          {submitted3 && profileError ? (
+            <Text style={{marginTop: 8, color: "red"}}>{profileError}</Text>
+          ):null}
         </View>
 
         <TouchableOpacity
@@ -873,6 +934,8 @@ export default function App() {
             <Text style={{ fontSize: 14, color: COLORS.textSecondary, fontWeight: "500" }}>
               Full Name:
             </Text>
+            
+            
             <Text style={{ fontSize: 16, color: COLORS.textPrimary }}>
               {userInfo.fullName}
             </Text>
@@ -1060,4 +1123,9 @@ const styles = StyleSheet.create({
     color: "#000",
     marginLeft: 4,
   },
+  multipleSelectBorder: {
+    marginBottom: 20, 
+    borderWidth: 1, 
+    borderRadius: 10, 
+    padding: 8}
 });

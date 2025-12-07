@@ -237,8 +237,10 @@ export default function FriendGroupScreen() {
           )}
           {isUpcoming && (
             <View style={styles.eventActions}>
+              <View style = {{alignItems : 'center', marginRight: 8}}>
+
               <TouchableOpacity
-                style={[styles.actionButton, isGoing === false && styles.actionButtonActive, { marginRight: 8 }]}
+                style={[styles.actionButton, isGoing === false && styles.actionButtonActiveDecline]}
                 onPress={() => handleEventResponse(event.id, false, event)}
               >
                 <Ionicons 
@@ -246,9 +248,14 @@ export default function FriendGroupScreen() {
                   size={20} 
                   color={isGoing === false ? "#fff" : "#000"} 
                 />
-              </TouchableOpacity>
+                </TouchableOpacity>
+                <Text style = {{ marginTop: 4, fontSize: 12}} >Decline</Text>
+                </View>
+
+              
+              <View style = {{alignItems : 'center', marginRight: 8}}>
               <TouchableOpacity
-                style={[styles.actionButton, isGoing === true && styles.actionButtonActive]}
+                style={[styles.actionButton, isGoing === true && styles.actionButtonActiveAccept]}
                 onPress={() => handleEventResponse(event.id, true, event)}
               >
                 <Ionicons 
@@ -257,6 +264,8 @@ export default function FriendGroupScreen() {
                   color={isGoing === true ? "#fff" : "#000"} 
                 />
               </TouchableOpacity>
+                <Text style = {{ marginTop: 4, fontSize: 12}} >Accept</Text>
+              </View>
             </View>
           )}
         </View>
@@ -677,6 +686,7 @@ const styles = StyleSheet.create({
   eventActions: {
     flexDirection: 'row',
     marginTop: 8,
+    flexWrap: "nowrap"
   },
   actionButton: {
     width: 32,
@@ -688,9 +698,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#fff',
   },
-  actionButtonActive: {
-    backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
+  actionButtonActiveDecline: {
+    backgroundColor: '#fe6966ff',
+    borderColor: '#fe6966ff',
+  },
+  actionButtonActiveAccept: {
+    backgroundColor: '#7fff81ff',
+    borderColor: '#7fff81ff',
   },
   chatWrapper: {
     flex: 1,
