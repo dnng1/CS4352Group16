@@ -163,42 +163,33 @@ export default function Dashboard() {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={styles.headerRow}>
-          <View style={styles.profileContainer}>
-            <TouchableOpacity
-              style={styles.profileButton}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              onPress={() => setMenuOpen(!menuOpen)}
-            >
-              <View style={styles.profileCircle}>
-                <Text style={styles.profileInitials}>U</Text>
-              </View>
-            </TouchableOpacity>
-            {menuOpen && (
-              <View style={styles.menuInFlow} pointerEvents="auto">
-                <TouchableOpacity
-                  style={styles.menuItem}
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                  onPress={() => {
-                    setMenuOpen(false);
-                    router.replace('/welcome');
-                  }}
-                >
-                  <Text style={styles.menuText}>Sign out</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
+      <View style={styles.headerRow}>
+        <View style={styles.profileContainer}>
+          <TouchableOpacity
+            style={styles.profileButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            onPress={() => setMenuOpen(!menuOpen)}
+          >
+            <View style={styles.profileCircle}>
+              <Text style={styles.profileInitials}>Profile</Text>
+            </View>
+          </TouchableOpacity>
+          {menuOpen && (
+            <View style={styles.menuInFlow} pointerEvents="auto">
+              <TouchableOpacity
+                style={styles.menuItem}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                onPress={() => { setMenuOpen(false); 
+                router.replace('/welcome'); }}
+              >
+                <Text style={styles.menuText}>Sign out</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
-        <Text style={styles.heading}>Home</Text>
-
-        <TextInput
-          style={styles.searchBar}
-          placeholder="Search"
-          value={search}
-          onChangeText={setSearch}
-        />
-
+      </View>
+      <Text style={styles.heading}>Home</Text>
+      <TextInput style={styles.searchBar} placeholder="Search" value={search} onChangeText={setSearch}/>
         {/* SEARCH mode */}
         {search.trim().length > 0 ? (
           <>
@@ -255,15 +246,15 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     position: "relative",
-    height: 44,
+    height: 74,
   },
   profileButton: {
     paddingTop: 10,
   },
   profileCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     backgroundColor: "#E2E8F0",
     alignItems: "center",
     justifyContent: "center",
@@ -273,10 +264,11 @@ const styles = StyleSheet.create({
   profileInitials: {
     fontWeight: "700",
     color: "#1F2937",
+    fontSize: 11,
   },
   menuInFlow: {
     position: "absolute",
-    top: 44,
+    top: 74,
     right: 0,
     backgroundColor: "#FFFFFF",
     borderRadius: 10,

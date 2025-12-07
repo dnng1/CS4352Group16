@@ -9,6 +9,8 @@ import {
   Image,
   Alert,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -375,6 +377,34 @@ export default function App() {
   const renderQuiz = () => (
     <ScrollView style={{ flex: 1 }}>
       <View style={{ paddingTop: 20 }}>
+        {cameFromSummary && (
+          <TouchableOpacity
+            onPress={() => {
+              if (selectedOption) {
+                setAnswers({ ...answers, [currentQuestion]: selectedOption });
+              }
+              setCurrentStep(4);
+              setCameFromSummary(false);
+            }}
+            style={{
+              backgroundColor: COLORS.primary,
+              paddingVertical: 16,
+              borderRadius: 12,
+              alignItems: "center",
+              marginBottom: 20,
+            }}
+          >
+            <Text
+              style={{
+                color: COLORS.textPrimary,
+                fontSize: 16,
+                fontWeight: "600",
+              }}
+            >
+              ← Back to Summary
+            </Text>
+          </TouchableOpacity>
+        )}
         <View
           style={{
             height: 4,
@@ -468,8 +498,18 @@ export default function App() {
     const supportOptions = ["Meeting people from home", "Learning local language", "Finding friends", "Cultural events"];
 
     return (
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={{ paddingTop: 20 }}>
+      <KeyboardAvoidingView 
+        style={{ flex: 1 }} 
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+      >
+        <ScrollView 
+          style={{ flex: 1 }} 
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
+          <View style={{ paddingTop: 20 }}>
           <Text
             style={{
               fontSize: 28,
@@ -729,6 +769,7 @@ export default function App() {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
     );
   };
 
