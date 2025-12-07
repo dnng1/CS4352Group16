@@ -79,7 +79,7 @@ export default function CreateEventScreen() {
 
   const getMarkedDates = () => {
     const marked: any = {};
-    
+
     if (startDate) {
       marked[startDate] = {
         startingDay: true,
@@ -87,14 +87,14 @@ export default function CreateEventScreen() {
         textColor: "#FFFFFF",
       };
     }
-    
+
     if (endDate) {
       marked[endDate] = {
         endingDay: true,
         color: COLORS.primary,
         textColor: "#FFFFFF",
       };
-      
+
       // Mark dates in between
       if (startDate && endDate) {
         const [startYear, startMonth, startDay] = startDate.split('-').map(Number);
@@ -102,13 +102,13 @@ export default function CreateEventScreen() {
         const start = new Date(startYear, startMonth - 1, startDay);
         const end = new Date(endYear, endMonth - 1, endDay);
         const current = new Date(start);
-        
+
         while (current <= end) {
           const year = current.getFullYear();
           const month = String(current.getMonth() + 1).padStart(2, '0');
           const day = String(current.getDate()).padStart(2, '0');
           const dateString = `${year}-${month}-${day}`;
-          
+
           if (dateString !== startDate && dateString !== endDate) {
             marked[dateString] = {
               color: COLORS.primary,
@@ -119,7 +119,7 @@ export default function CreateEventScreen() {
         }
       }
     }
-    
+
     return marked;
   };
 
@@ -142,64 +142,55 @@ export default function CreateEventScreen() {
   const formatDateString = (dateString: string) => {
     const [year, month, day] = dateString.split('-').map(Number);
     const date = new Date(year, month - 1, day);
-    return date.toLocaleDateString('en-US', { 
-      month: 'long', 
+    return date.toLocaleDateString('en-US', {
+      month: 'long',
       day: 'numeric',
       year: 'numeric'
     });
   };
 
   const formatDeviceTime = (date: Date) =>
-  date.toLocaleTimeString([], {hour: "numeric", minute: "2-digit"});
+    date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 
-  const openStartPicker = () => 
-  {
+  const openStartPicker = () => {
     setTempStartTimeDate(startTimeDate);
     setShowStartPicker(true);
   };
-  
-  const openEndPicker = () => 
-  {
+
+  const openEndPicker = () => {
     setTempEndTimeDate(endTimeDate);
     setShowEndPicker(true);
   };
 
-  const handleStartTimeChange = (event: any, date?: Date) => 
-  {
-    if (Platform.OS === "ios") 
-    {
+  const handleStartTimeChange = (event: any, date?: Date) => {
+    if (Platform.OS === "ios") {
       if (date) //update as user scrolls
       {
         setTempStartTimeDate(date);
       }
     }
     else {
-    setShowStartPicker(false);
-    if (event.type === "set" && date) 
-    {
-      setStartTimeDate(date);
-      setStartTime(formatDeviceTime(date));
+      setShowStartPicker(false);
+      if (event.type === "set" && date) {
+        setStartTimeDate(date);
+        setStartTime(formatDeviceTime(date));
+      }
     }
-  }
-};
+  };
 
-const handleEndTimeChange = (event: any, date?: Date) =>
-{
-  if (Platform.OS === "ios")
-  {
-    if (date)
-    {
-      setTempEndTimeDate(date);
+  const handleEndTimeChange = (event: any, date?: Date) => {
+    if (Platform.OS === "ios") {
+      if (date) {
+        setTempEndTimeDate(date);
+      }
+    } else {
+      setShowEndPicker(false);
+      if (event.type === "set" && date) {
+        setEndTimeDate(date);
+        setEndTime(formatDeviceTime(date));
+      }
     }
-  } else {
-    setShowEndPicker(false);
-    if (event.type === "set" && date) 
-    {
-      setEndTimeDate(date);
-      setEndTime(formatDeviceTime(date));
-    }
-  }
-};
+  };
 
   return (
     <View style={styles.container}>
@@ -289,62 +280,56 @@ const handleEndTimeChange = (event: any, date?: Date) =>
         <View style={styles.fieldGroup}>
           <Text style={styles.label}>
             Select Times <Text style={styles.requiredAsterisk}>*</Text>
-            </Text>
-            <View style={styles.timeContainer}>
-              {/* Start time */}
-              <View style={styles.timeInputGroup}>
-                <Text style={styles.timeLabel}>
-                  Start Time <Text style={styles.requiredAsterisk}>*</Text>
-                  </Text>
-                  <TouchableOpacity
-            style={styles.timeInput}
-            onPress={() => {
-              if (Platform.OS === "ios") 
-                {
-                openStartPicker();
-              } else {
-                setShowStartPicker(true);
-              }
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 16,
-                color: startTime ? COLORS.textPrimary : "#999",
-              }}
-            >
-              {startTime || "Select start time"}
-            </Text>
-          </TouchableOpacity>
+          </Text>
+          <View style={styles.timeContainer}>
+            {/* Start time */}
+            <View style={styles.timeInputGroup}>
+              <Text style={styles.timeLabel}>
+                Start Time <Text style={styles.requiredAsterisk}>*</Text>
+              </Text>
+              <TouchableOpacity
+                style={styles.timeInput}
+                onPress={() => {
+                  if (Platform.OS === "ios") {
+                    openStartPicker();
+                  } else {
+                    setShowStartPicker(true);
+                  }
+                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: startTime ? COLORS.textPrimary : "#999",
+                  }}>
+                  {startTime || "Select start time"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {/* End time */}
+            <View style={styles.timeInputGroup}>
+              <Text style={styles.timeLabel}>
+                End Time <Text style={styles.requiredAsterisk}>*</Text>
+              </Text>
+              <TouchableOpacity
+                style={styles.timeInput}
+                onPress={() => {
+                  if (Platform.OS === "ios") {
+                    openEndPicker();
+                  } else {
+                    setShowEndPicker(true);
+                  }
+                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: endTime ? COLORS.textPrimary : "#999",
+                  }}>
+                  {endTime || "Select end time"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-    {/* End Time */}
-    <View style={styles.timeInputGroup}>
-      <Text style={styles.timeLabel}>
-        End Time <Text style={styles.requiredAsterisk}>*</Text>
-      </Text>
-      <TouchableOpacity
-        style={styles.timeInput}
-        onPress={() => {
-          if (Platform.OS === "ios") {
-            openEndPicker();
-          } else {
-            setShowEndPicker(true);
-          }
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 16,
-            color: endTime ? COLORS.textPrimary : "#999",
-          }}
-        >
-          {endTime || "Select end time"}
-        </Text>
-      </TouchableOpacity>
-    </View>
-    </View>
-  </View>
-
 
         <View style={styles.fieldGroup}>
           <Text style={styles.label}>Visibility - Select Groups <Text style={styles.requiredAsterisk}>*</Text></Text>
@@ -389,7 +374,7 @@ const handleEndTimeChange = (event: any, date?: Date) =>
           style={[
             styles.button,
             (!eventName || !startDate || !endDate || !startTime || !endTime || selectedGroups.length === 0) &&
-              styles.buttonDisabled,
+            styles.buttonDisabled,
           ]}
           onPress={handleNext}
           disabled={!eventName || !startDate || !endDate || !startTime || !endTime || selectedGroups.length === 0}
@@ -398,10 +383,8 @@ const handleEndTimeChange = (event: any, date?: Date) =>
         </TouchableOpacity>
       </ScrollView>
 
-            {/* iOS bottom-sheet style pickers */}
       {Platform.OS === "ios" && (
         <>
-          {/* Start time modal */}
           <Modal
             visible={showStartPicker}
             transparent
@@ -418,6 +401,7 @@ const handleEndTimeChange = (event: any, date?: Date) =>
                   value={tempStartTimeDate || startTimeDate}
                   mode="time"
                   display="spinner"
+                  textColor = "#000000"
                   onChange={handleStartTimeChange}
                 />
                 <View style={styles.modalButtonsRow}>
@@ -444,8 +428,6 @@ const handleEndTimeChange = (event: any, date?: Date) =>
               </View>
             </View>
           </Modal>
-
-          {/* End time modal */}
           <Modal
             visible={showEndPicker}
             transparent
@@ -462,6 +444,7 @@ const handleEndTimeChange = (event: any, date?: Date) =>
                   value={tempEndTimeDate || endTimeDate}
                   mode="time"
                   display="spinner"
+                  textColor = "#000000"
                   onChange={handleEndTimeChange}
                 />
                 <View style={styles.modalButtonsRow}>
@@ -491,7 +474,6 @@ const handleEndTimeChange = (event: any, date?: Date) =>
         </>
       )}
 
-      {/* Android: use native dialogs */}
       {Platform.OS === "android" && showStartPicker && (
         <DateTimePicker
           value={startTimeDate}
@@ -508,7 +490,7 @@ const handleEndTimeChange = (event: any, date?: Date) =>
           onChange={handleEndTimeChange}
         />
       )}
-    </View> 
+    </View>
   );
 }
 
@@ -530,12 +512,12 @@ const styles = StyleSheet.create({
   profileButton: {
     paddingTop: 10,
   },
-  heading: { 
+  heading: {
     marginTop: 10,
     marginBottom: 40,
-    fontSize: 24, 
-    fontWeight: "700", 
-    textAlign: "center", 
+    fontSize: 24,
+    fontWeight: "700",
+    textAlign: "center",
   },
   profileCircle: {
     width: 70,
@@ -638,7 +620,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: "#fff",
     justifyContent: "center",
-    paddingVertical: 0, 
+    paddingVertical: 0,
   },
   timeDisplay: {
     marginTop: 6,
@@ -698,13 +680,13 @@ const styles = StyleSheet.create({
   requiredAsterisk: {
     color: "#FF0000",
   },
-    modalOverlay: {
+  modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.4)",
     justifyContent: "flex-end",
   },
   modalContent: {
-    backgroundColor: "#7CA7D9",
+    backgroundColor: "#FFFFFF",
     paddingHorizontal: 16,
     paddingTop: 12,
     paddingBottom: 16,
@@ -712,7 +694,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 16,
   },
   modalTitle: {
-    color: "#fff",
+    color: "#000000",
     fontSize: 16,
     fontWeight: "600",
     textAlign: "center",
@@ -724,7 +706,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   modalButtonText: {
-    color: "#FFFFFF",
+    color: "#000000",
     fontSize: 16,
     fontWeight: "600",
     paddingVertical: 8,
