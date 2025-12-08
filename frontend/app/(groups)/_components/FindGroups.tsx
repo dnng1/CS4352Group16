@@ -6,7 +6,8 @@ export default function FindGroups(props: any) {
   
   const handleJoin = async (groupId: number) => {
     try {
-      const updated = { ...joined, [groupId]: true };
+      const updated = { ...joined};
+      updated[groupId] = true;
       // Save to AsyncStorage first to ensure persistence
       await AsyncStorage.setItem('joinedGroups', JSON.stringify(updated));
       // Then update state
@@ -20,108 +21,117 @@ export default function FindGroups(props: any) {
       <ScrollView>
       <Text style={styles.subheading}>Groups That May Interest You</Text>
     {(!joined[1] || !joined[4]) && (
-          <Text style={styles.subsubheading1}>Support Systems</Text>
-          
+          <Text style={styles.subsubheading1}>Support Systems</Text>  
         )}
-    
-    {/*  Friend group 1*/}
+        {/*  Friend group 1*/}
       {!joined[1] && (
-      <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
+      <View style={[styles.card, { paddingVertical: 12}]}>
+        <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 8}}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/10156/10156019.png"}} style={styles.profileImage}></Image>
-        <View style={styles.cardRow}>
-            <View style={{flexDirection: "column", flex: 1, flexShrink: 1}}>
-                <Text style={styles.groupName}>International Student Association</Text>
-                <Text style={styles.desc}>Support group for international college students looking for mentorship and guidance</Text>
-                <Text style={styles.desc1}>Flexible meeting</Text>
+                <View style={{flex: 1, marginLeft: 10}}>
+                <Text style={styles.groupName}>Student Network</Text>
             </View>
-            <TouchableOpacity style={[styles.joinButton, joined[1] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(1)}>
+            
+        </View>
+        <Text style={[styles.desc, { marginLeft: 20}]}>Support group for international college students looking for mentorship and guidance</Text>
+        <Text style={[styles.desc1, { marginLeft: 20}]}>Flexible meeting times</Text>
+        <TouchableOpacity style={[styles.joinButton, joined[1] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(1)}>
                 <Text style={styles.buttonText}>
                     {joined[1] ? "Joined" : "Join"}
                 </Text>
             </TouchableOpacity>
-        </View>
       </View>
       )}
 
+    
       {/*  Friend group 4*/}
       {!joined[4] && (
-      <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
+      <View style={[styles.card, { paddingVertical: 12}]}>
+        <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 8}}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/1323/1323734.png"}} style={styles.profileImage}></Image>
-        <View style={styles.cardRow}>
-            <View style={{flexDirection: "column", flex: 1, flexShrink:1}}>
+                <View style={{flex: 1, marginLeft: 10}}>
                 <Text style={styles.groupName}>Bridge Between Us </Text>
-                <Text style={styles.desc}>Connect with other migrants to learn from each other's moving process and figure logistics out together</Text>
-                <Text style={styles.desc1}>Meets weekly</Text>
             </View>
+            </View>
+            <Text style={[styles.desc, { marginLeft: 20}]}>Support group for international college students looking for mentorship and guidance</Text>
+        <Text style={[styles.desc1, { marginLeft: 20}]}>Flexible meeting times</Text>
+      
             <TouchableOpacity style={[styles.joinButton, joined[4] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(4)}>
                 <Text style={styles.buttonText}>
                     {joined[4] ? "Joined" : "Join"}
                 </Text>
             </TouchableOpacity>
         </View>
-      </View>
+        
       )}
 {(!joined[2] || !joined[3]) && (
-      <Text style={styles.subsubheading2}>Hobbies & Culture</Text>
-    )}            {/*  Friend group 2*/}
-      {!joined[2] && (
-      <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
+      <Text style={styles.subsubheading2}>Hobbies & Culture</Text>)}            
+      {/*  Friend group 2*/}
+        {!joined[2] && (
+      <View style={[styles.card, { paddingVertical: 12}]}>
+        <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 8}}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/3083/3083417.png"}} style={styles.profileImage}></Image>
-        <View style={styles.cardRow}>
-            <View style={{flexDirection: "column", flex: 1, flexShrink:1}}>
+                <View style={{flex: 1, marginLeft: 10}}>
                 <Text style={styles.groupName}>Musical Wonders</Text>
-                <Text style={styles.desc}>Group of artists with passion for creating music, merging music from their hometowns</Text>
-                <Text style={styles.desc1}>Meets monthly</Text>
             </View>
-            <TouchableOpacity style={[styles.joinButton, joined[2] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(2)}>
+            
+        </View>
+            <Text style={[styles.desc, {marginLeft: 20}]}>Group of artists with passion for creating music, merging music from their hometowns</Text>
+                <Text style={styles.desc1}>Meets monthly</Text>
+        <TouchableOpacity style={[styles.joinButton, joined[2] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(2)}>
                 <Text style={styles.buttonText}>
                     {joined[2] ? "Joined" : "Join"}
                 </Text>
             </TouchableOpacity>
-        </View>
       </View>
       )}
 
       {/*  Friend group 3*/}
-      {!joined[3] && (
-      <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
+
+              {!joined[3] && (
+      <View style={[styles.card, { paddingVertical: 12}]}>
+        <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 8}}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/1027/1027128.png"}} style={styles.profileImage}></Image>
-        <View style={styles.cardRow}>
-            <View style={{flexDirection: "column", flex: 1, flexShrink:1}}>
-                <Text style={styles.groupName}>Cooking Ninjas </Text>
-                <Text style={styles.desc}>Chatting, cooking, and laughing. Share and learn about various cultures through food</Text>
-                <Text style={styles.desc1}>Meets biweekly</Text>
+                <View style={{flex: 1, marginLeft: 10}}>
+                <Text style={styles.groupName}>Cooking Ninjas</Text>
             </View>
-            <TouchableOpacity style={[styles.joinButton, joined[3] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(3)}>
+            
+        </View>
+            <Text style={[styles.desc, {marginLeft: 20}]}>Food, fun, and chat. Share and learn about various cultures through food</Text>
+                <Text style={styles.desc1}>Meets biweekly</Text>
+        <TouchableOpacity style={[styles.joinButton, joined[3] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(3)}>
                 <Text style={styles.buttonText}>
                     {joined[3] ? "Joined" : "Join"}
                 </Text>
             </TouchableOpacity>
-        </View>
       </View>
       )}
 
 {!joined[5]&& (
-      <Text style={styles.subsubheading3}>Travel & Adventure</Text>
-      
-    )}      {/*  Friend group 5*/}
-      {!joined[5] && (
-      <View style={[styles.card, { flexDirection: "row", alignItems: "flex-start", paddingVertical: 12}]}>
+      <Text style={styles.subsubheading3}>Travel & Adventure</Text> 
+    )}
+    {/*  Friend group 5*/}
+
+              {!joined[5] && (
+      <View style={[styles.card, { paddingVertical: 12}]}>
+        <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 8}}>
         <Image source={{uri: "https://cdn-icons-png.flaticon.com/128/854/854894.png"}} style={styles.profileImage}></Image>
-        <View style={styles.cardRow}>
-            <View style={{flexDirection: "column", flex: 1, flexShrink:1}}>
+                <View style={{flex: 1, marginLeft: 10}}>
                 <Text style={styles.groupName}>Town Travellers </Text>
-                <Text style={styles.desc}>Visit must-see places in your local city with other newcomers</Text>
-                <Text style={styles.desc1}>Meets monthly</Text>
             </View>
-            <TouchableOpacity style={[styles.joinButton, joined[5] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(5)}>
+            
+        </View>
+            <Text style={[styles.desc, {marginLeft: 20}]}>Visit must-see places in your local city with other newcomers</Text>
+                <Text style={styles.desc1}>Meets monthly</Text>
+        <TouchableOpacity style={[styles.joinButton, joined[5] ? styles.joinActive : styles.joinInactive]} onPress={() => handleJoin(5)}>
                 <Text style={styles.buttonText}>
                     {joined[5] ? "Joined" : "Join"}
                 </Text>
             </TouchableOpacity>
-        </View>
       </View>
       )}
+
+      
 
     </ScrollView>
     </View>
@@ -203,21 +213,21 @@ const styles = StyleSheet.create({
   subsubheading1 : {
     fontSize: 14, 
     marginBottom: 20, 
-    fontWeight: 700,
+    fontWeight: "700",
     color: "#6e8cf9ff",
     textAlign: "center"
   },
   subsubheading2: {
     fontSize: 14, 
     marginBottom: 20, 
-    fontWeight: 700,
+    fontWeight: "700",
     color: "green",
     textAlign: "center"
   },
   subsubheading3: {
     fontSize: 14, 
     marginBottom: 20, 
-    fontWeight: 700,
+    fontWeight: "700",
     color: "#ffaf6eff",
     textAlign: "center"
   },
@@ -231,21 +241,20 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 2}, 
     shadowOpacity: 0.2,
     shadowRadius: 4, 
-    elevation: 3},
+    elevation: 3,
+    marginHorizontal: 3
+  },
     
     cardRow: {
-        flexDirection: "row", 
+        flexDirection: "column", 
         flex: 1, 
-        alignItems: "center", 
-        justifyContent: "space-between",
-        marginEnd: 20,
-    },
+      },
     
     image: {
       width: "100%", 
       aspectRatio: 4/3,
       marginBottom: 10, 
-      objectFit: "cover"
+      resizeMode: "cover"
     },
 
     profileImage: {
@@ -261,23 +270,19 @@ const styles = StyleSheet.create({
 
     groupName: {
       fontWeight: "600",
-      marginLeft: 20,
+      marginLeft: 10,
     },
      desc: {
       fontWeight: "400",
-      marginLeft: 20, 
-      flexWrap: "wrap",
-      maxWidth: "85%",
-      justifyContent: "space-between", 
-      marginTop: 5
+      marginBottom: 5,
     },
 desc1: {
       fontWeight: "200",
       marginLeft: 20, 
       flexWrap: "wrap",
       maxWidth: "80%",
-      justifyContent: "space-between", 
-      marginTop: 5
+      marginTop: 5,
+      marginBottom: 15,
     },
     joinButton:{
         borderRadius: 8,
@@ -287,7 +292,8 @@ desc1: {
         width: 65, 
         borderWidth: 1,
         alignSelf: "center",
-        flexShrink: 0
+        flexShrink: 0,
+        marginRight: 10
         },
 
     buttonText: {
@@ -298,5 +304,11 @@ desc1: {
         backgroundColor: "#b4ecb4"
     },
     joinInactive : {
-    }
+    },
+    row1:{
+      flexDirection: "row",
+      alignItems:"center",
+      justifyContent:"space-between",
+      marginBottom: 5
+    },
 });
