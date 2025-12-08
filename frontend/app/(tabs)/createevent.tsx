@@ -146,19 +146,46 @@ export default function CreateEventScreen() {
   };
 
   const handleNext = () => {
-    if (eventName && startDate && endDate && startTime && endTime && selectedGroups.length > 0) {
-      router.push({
-        pathname: "/createeventdetails",
-        params: {
-          eventName,
-          startDate,
-          endDate,
-          startTime,
-          endTime,
-          selectedGroups: JSON.stringify(selectedGroups),
-        },
-      });
+    if (!eventName || !startDate || !endDate || !startTime || !endTime || selectedGroups.length === 0) return;
+
+    if (isPastDate(startDate)) {
+      Alert.alert("Invalid date", "Start date cannot be in the past.");
+      return;
     }
+    if (isPastDate(endDate)) {
+      Alert.alert("Invalid date", "End date cannot be in the past.");
+      return;
+    }
+
+    if (startDate === endDate) {
+      const startMinutes = getMinutesFromDate(startTimeDate);
+      const endMinutes = getMinutesFromDate(endTimeDate);
+      if (endMinutes <= startMinutes) {
+        Alert.alert("Invalid time", "End time must be later than start time for same-day events.");
+        return;
+      }
+    }
+
+    if (startDate && isToday(startDate)) {
+      const nowMinutes = getMinutesFromDate(new Date());
+      const startMinutes = getMinutesFromDate(startTimeDate);
+      if (startMinutes < nowMinutes) {
+        Alert.alert("Invalid time", "Start time cannot be in the past.");
+        return;
+      }
+    }
+
+    router.push({
+      pathname: "/createeventdetails",
+      params: {
+        eventName,
+        startDate,
+        endDate,
+        startTime,
+        endTime,
+        selectedGroups: JSON.stringify(selectedGroups),
+      },
+    });
   };
 
   const formatDateString = (dateString: string) => {
@@ -188,6 +215,15 @@ export default function CreateEventScreen() {
   const getMinutesFromDate = (date: Date) =>
     date.getHours() * 60 + date.getMinutes();
 
+  const isPastDate = (dateString: string) => {
+    if (!dateString) return false;
+    const [year, month, day] = dateString.split("-").map(Number);
+    const today = new Date();
+    const target = new Date(year, month - 1, day);
+    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    return target < startOfToday;
+  };
+
   const openStartPicker = () => {
     setTempStartTimeDate(startTimeDate);
     setShowStartPicker(true);
@@ -208,8 +244,28 @@ export default function CreateEventScreen() {
     else {
       setShowStartPicker(false);
       if (event.type === "set" && date) {
+        if (startDate && isToday(startDate)) {
+          const now = new Date();
+          const selectedMinutes = getMinutesFromDate(date);
+          const nowMinutes = getMinutesFromDate(now);
+
+          if (selectedMinutes < nowMinutes) {
+            Alert.alert(
+              "Invalid time",
+              "Start time cannot be in the past."
+            );
+            return;
+          }
+        }
         setStartTimeDate(date);
         setStartTime(formatDeviceTime(date));
+        if (startDate && endDate && startDate === endDate && endTime) {
+          const startMinutes = getMinutesFromDate(date);
+          const endMinutes = getMinutesFromDate(endTimeDate);
+          if (endMinutes <= startMinutes) {
+            setEndTime("");
+          }
+        }
       }
     }
   };
@@ -222,6 +278,32 @@ export default function CreateEventScreen() {
     } else {
       setShowEndPicker(false);
       if (event.type === "set" && date) {
+        if (endDate && isToday(endDate)) {
+          const now = new Date();
+          const selectedMinutes = getMinutesFromDate(date);
+          const nowMinutes = getMinutesFromDate(now);
+
+          if (selectedMinutes < nowMinutes) {
+            Alert.alert(
+              "Invalid time",
+              "End time cannot be in the past."
+            );
+            return;
+          }
+        }
+
+        if (startDate && endDate && startDate === endDate && startTime) {
+          const endMinutes = getMinutesFromDate(date);
+          const startMinutes = getMinutesFromDate(startTimeDate);
+
+          if (endMinutes <= startMinutes) {
+            Alert.alert(
+              "Invalid time",
+              "End time must be later than the start time for same-day events."
+            );
+            return;
+          }
+        }
         setEndTimeDate(date);
         setEndTime(formatDeviceTime(date));
       }
@@ -290,8 +372,10 @@ export default function CreateEventScreen() {
             markingType="period"
             minDate={(() => {
               const today = new Date();
-              today.setDate(today.getDate() - 1);
-              return today.toISOString().split("T")[0];
+              const year = today.getFullYear();
+              const month = String(today.getMonth() + 1).padStart(2, "0");
+              const day = String(today.getDate()).padStart(2, "0");
+              return `${year}-${month}-${day}`;
             })()}
             style={styles.calendar}
             theme={{
@@ -475,13 +559,20 @@ export default function CreateEventScreen() {
                         if (selectedMinutes < nowMinutes) {
                           Alert.alert(
                             "Invalid time",
-                            "Start time cannot be in the past"
+                            "Start time cannot be in the past."
                           );
                           return;
                         }
                       }
                       setStartTimeDate(finalDate);
                       setStartTime(formatDeviceTime(finalDate));
+                      if (startDate && endDate && startDate === endDate && endTime) {
+                        const startMinutes = getMinutesFromDate(finalDate);
+                        const endMinutes = getMinutesFromDate(endTimeDate);
+                        if (endMinutes <= startMinutes) {
+                          setEndTime("");
+                        }
+                      }
                       setShowStartPicker(false);
                       setTempStartTimeDate(null);
                     }}
@@ -523,6 +614,19 @@ export default function CreateEventScreen() {
                   <TouchableOpacity
                     onPress={() => {
                       const finalDate = tempEndTimeDate || endTimeDate;
+                      if (endDate && isToday(endDate)) {
+                        const now = new Date();
+                        const selectedMinutes = getMinutesFromDate(finalDate);
+                        const nowMinutes = getMinutesFromDate(now);
+
+                        if (selectedMinutes < nowMinutes) {
+                          Alert.alert(
+                            "Invalid time",
+                            "End time cannot be in the past."
+                          );
+                          return;
+                        }
+                      }
                       if (startDate && endDate && startDate === endDate && startTime) {
                         const endMinutes = getMinutesFromDate(finalDate);
                         const startMinutes = getMinutesFromDate(startTimeDate);

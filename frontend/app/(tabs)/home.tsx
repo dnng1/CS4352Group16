@@ -26,10 +26,15 @@ const formatTime = (time: string) => {
   return `${displayHour}:${minutes} ${ampm}`;
 };
 
+const parseDateOnly = (value: string) => {
+  const [y, m, d] = value.split("-").map(Number);
+  return new Date(y, (m || 1) - 1, d || 1);
+};
+
 const formatDateRange = (event: any) => {
   if (event.startDate && event.endDate) {
-    const startDateObj = new Date(event.startDate);
-    const endDateObj = new Date(event.endDate);
+    const startDateObj = parseDateOnly(event.startDate);
+    const endDateObj = parseDateOnly(event.endDate);
     const formattedStartDate = startDateObj.toLocaleDateString('en-US', {
       month: 'long',
       day: 'numeric',
@@ -121,6 +126,8 @@ export default function Dashboard() {
   const [removedEventIds, setRemovedEventIds] = useState<number[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [eventToRemove, setEventToRemove] = useState<number | null>(null);
   
   const [onboardingActive, setOnboardingActive] = useState(false);
   const [onboardingStep, setOnboardingStep] = useState(0);
@@ -292,6 +299,19 @@ export default function Dashboard() {
     }
   };
 
+  const handleConfirmRemove = () => {
+    if (eventToRemove !== null) {
+      handleRemoveEvent(eventToRemove);
+    }
+    setConfirmVisible(false);
+    setEventToRemove(null);
+  };
+
+  const handleCancelRemove = () => {
+    setConfirmVisible(false);
+    setEventToRemove(null);
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -380,7 +400,8 @@ export default function Dashboard() {
                 <TouchableOpacity
                   onPress={(e) => {
                     e.stopPropagation();
-                    handleRemoveEvent(ev.id);
+                    setEventToRemove(ev.id);
+                    setConfirmVisible(true);
                   }}
                   style={styles.removeButton}
                 >
@@ -420,7 +441,8 @@ export default function Dashboard() {
               <TouchableOpacity
                 onPress={(e) => {
                   e.stopPropagation();
-                  handleRemoveEvent(ev.id);
+                  setEventToRemove(ev.id);
+                  setConfirmVisible(true);
                 }}
                 style={styles.removeButton}
               >
@@ -432,6 +454,36 @@ export default function Dashboard() {
         </>
       )}
     </ScrollView>
+
+    <Modal
+      visible={confirmVisible}
+      transparent={true}
+      animationType="fade"
+      onRequestClose={handleCancelRemove}
+    >
+      <View style={styles.confirmOverlay}>
+        <View style={styles.confirmBox}>
+          <Text style={styles.modalTitle}>Confirm Removal</Text>
+          <Text style={[styles.modalDetailText, { marginVertical: 12, textAlign: 'center' }]}>
+            Are you sure you want to remove this event from upcoming events?
+          </Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 }}>
+            <TouchableOpacity
+              style={[styles.confirmButton, styles.confirmButtonYes]}
+              onPress={handleConfirmRemove}
+            >
+              <Text style={styles.confirmButtonTextYes}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.confirmButton, styles.confirmButtonNo]}
+              onPress={handleCancelRemove}
+            >
+              <Text style={styles.confirmButtonTextNo}>No</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
 
     <Modal
       visible={modalVisible}
@@ -686,7 +738,7 @@ const styles = StyleSheet.create({
 
   removeButton: {
     position: "absolute",
-    bottom: 10,
+    top: 10,
     right: 10,
     backgroundColor: "#FF0000",
     paddingVertical: 8,
@@ -697,6 +749,48 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 14,
     fontWeight: "600",
+  },
+  confirmOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  confirmBox: {
+    width: '85%',
+    backgroundColor: COLORS.background,
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  confirmButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmButtonYes: {
+    marginRight: 8,
+    backgroundColor: "#FF0000",
+  },
+  confirmButtonNo: {
+    marginLeft: 8,
+    backgroundColor: "#E5E7EB",
+  },
+  confirmButtonTextYes: {
+    color: "#FFFFFF",
+    fontSize: 15,
+    fontWeight: "700",
+  },
+  confirmButtonTextNo: {
+    color: COLORS.textPrimary,
+    fontSize: 15,
+    fontWeight: "700",
   },
   modalOverlay: {
     flex: 1,

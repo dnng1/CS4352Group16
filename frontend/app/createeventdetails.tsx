@@ -30,6 +30,11 @@ export default function CreateEventDetailsScreen() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<string | null>(null);
 
+  const parseDateOnly = (value: string) => {
+    const [y, m, d] = value.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  };
+
   const pickImage = async () => {
     // Request permission
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -66,9 +71,9 @@ export default function CreateEventDetailsScreen() {
       const storedEvents = await AsyncStorage.getItem('events');
       const existingEvents = storedEvents ? JSON.parse(storedEvents) : [];
       
-      // Format dates for display 
-      const startDateObj = new Date(params.startDate as string);
-      const endDateObj = new Date(params.endDate as string);
+      // Format dates for display using local date (no timezone shift)
+      const startDateObj = parseDateOnly(params.startDate as string);
+      const endDateObj = parseDateOnly(params.endDate as string);
       const formattedStartDate = startDateObj.toLocaleDateString('en-US', { 
         month: 'long', 
         day: 'numeric',
@@ -185,14 +190,14 @@ export default function CreateEventDetailsScreen() {
         <View style={styles.eventInfo}>
           <Text style={styles.eventInfoLabel}>Date & Time Range:</Text>
           <Text style={styles.eventInfoText}>
-            {new Date(params.startDate as string).toLocaleDateString('en-US', { 
+            {parseDateOnly(params.startDate as string).toLocaleDateString('en-US', { 
               month: 'long', 
               day: 'numeric',
               year: 'numeric'
             })}
             {params.startTime && ` at ${(params.startTime as string)}`}
             {" - "}
-            {new Date(params.endDate as string).toLocaleDateString('en-US', { 
+            {parseDateOnly(params.endDate as string).toLocaleDateString('en-US', { 
               month: 'long', 
               day: 'numeric',
               year: 'numeric'
