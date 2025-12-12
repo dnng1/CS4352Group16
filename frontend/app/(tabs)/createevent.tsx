@@ -6,7 +6,7 @@ import { Calendar } from "react-native-calendars";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Tooltip from "../../components/Tooltip";
-import { hasCompletedOnboarding } from "../../utils/onboarding";
+import { hasCompletedOnboarding, resetOnboarding } from "../../utils/onboarding";
 
 const COLORS = {
   primary: "#7CA7D9",
@@ -44,6 +44,18 @@ export default function CreateEventScreen() {
   const [onboardingActive, setOnboardingActive] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
   const eventNameRef = useRef<View>(null);
+
+  const handleStartOnboarding = async () => {
+    await resetOnboarding();
+    if (eventNameRef.current) {
+      setTimeout(() => {
+        eventNameRef.current?.measure((x, y, width, height, pageX, pageY) => {
+          setTooltipPosition({ x: pageX, y: pageY, width, height });
+          setOnboardingActive(true);
+        });
+      }, 100);
+    }
+  };
 
   useEffect(() => {
     const loadJoinedGroups = async () => {
@@ -313,6 +325,16 @@ export default function CreateEventScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
+        <View style={styles.helpContainer}>
+          <TouchableOpacity
+            style={styles.helpButton}
+            onPress={handleStartOnboarding}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons name="help-circle-outline" size={44} color={COLORS.primary} />
+            <Text style={styles.helpLabel}>Help</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.profileContainer}>
           <TouchableOpacity
             style={styles.profileButton}
@@ -366,6 +388,7 @@ export default function CreateEventScreen() {
 
         <View style={styles.fieldGroup}>
           <Text style={styles.label}>Select Dates <Text style={styles.requiredAsterisk}>*</Text></Text>
+          <Text style={styles.subtext}>Double click the date to select an event to be single day</Text>
           <Calendar
             onDayPress={handleDateSelect}
             markedDates={getMarkedDates()}
@@ -693,8 +716,23 @@ const styles = StyleSheet.create({
   },
   headerRow: {
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     alignItems: "center",
+  },
+  helpContainer: {
+    position: "relative",
+    height: 74,
+  },
+  helpButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 10,
+  },
+  helpLabel: {
+    fontSize: 12,
+    color: COLORS.primary,
+    marginTop: 4,
+    fontWeight: "500",
   },
   profileContainer: {
     position: "relative",
@@ -766,6 +804,12 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: COLORS.textPrimary,
     marginBottom: 8,
+  },
+  subtext: {
+    fontSize: 13,
+    color: COLORS.textSecondary,
+    marginBottom: 8,
+    fontStyle: "italic",
   },
   input: {
     width: "100%",

@@ -441,6 +441,7 @@ export default function EditEventModal({ visible, event, onClose, onSave }: Edit
 
           <View style={styles.fieldGroup}>
             <Text style={styles.label}>Select Dates <Text style={styles.requiredAsterisk}>*</Text></Text>
+            <Text style={styles.subtext}>Double click the date to select an event to be single day</Text>
             <Calendar
               onDayPress={handleDateSelect}
               markedDates={getMarkedDates()}
@@ -619,7 +620,7 @@ export default function EditEventModal({ visible, event, onClose, onSave }: Edit
             />
           </View>
 
-          <View style={styles.fieldGroup}>
+          <View style={[styles.fieldGroup, styles.imageFieldGroup]}>
             <Text style={styles.label}>Event Image</Text>
             <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
               {image ? (
@@ -792,11 +793,20 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 24,
   },
+  imageFieldGroup: {
+    marginTop: 70,
+  },
   label: {
     fontSize: 16,
     fontWeight: "600",
     color: COLORS.textPrimary,
     marginBottom: 8,
+  },
+  subtext: {
+    fontSize: 13,
+    color: COLORS.textSecondary,
+    marginBottom: 8,
+    fontStyle: "italic",
   },
   input: {
     width: "100%",

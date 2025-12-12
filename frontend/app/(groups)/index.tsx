@@ -7,8 +7,16 @@ import { useRouter, useFocusEffect } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import Tooltip from "../../components/Tooltip";
-import { hasCompletedOnboarding } from "../../utils/onboarding";
+import { hasCompletedOnboarding, resetOnboarding } from "../../utils/onboarding";
 import { Ionicons } from "@expo/vector-icons";
+
+const COLORS = {
+  primary: "#7CA7D9",
+  border: "#003366",
+  textPrimary: "#000000",
+  textSecondary: "#444444",
+  background: "#FFFFFF",
+};
 
 export default function Groups() {
   const router = useRouter();
@@ -26,6 +34,18 @@ export default function Groups() {
   const [onboardingActive, setOnboardingActive] = useState(false);
   const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
   const toggleBarRef = useRef<View>(null);
+
+  const handleStartOnboarding = async () => {
+    await resetOnboarding();
+    if (toggleBarRef.current) {
+      setTimeout(() => {
+        toggleBarRef.current?.measure((x, y, width, height, pageX, pageY) => {
+          setTooltipPosition({ x: pageX, y: pageY, width, height });
+          setOnboardingActive(true);
+        });
+      }, 100);
+    }
+  };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -85,6 +105,16 @@ export default function Groups() {
   return (
     <SafeAreaView style={styles.container} edges={[]}>
       <View style={styles.headerRow}>
+        <View style={styles.helpContainer}>
+          <TouchableOpacity
+            style={styles.helpButton}
+            onPress={handleStartOnboarding}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons name="help-circle-outline" size={44} color={COLORS.primary} />
+            <Text style={styles.helpLabel}>Help</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.profileContainer}>
           <TouchableOpacity
             style={styles.profileButton}
@@ -178,8 +208,23 @@ const styles = StyleSheet.create({
   },
   headerRow: {
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     alignItems: "center",
+  },
+  helpContainer: {
+    position: "relative",
+    height: 74,
+  },
+  helpButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 10,
+  },
+  helpLabel: {
+    fontSize: 12,
+    color: COLORS.primary,
+    marginTop: 4,
+    fontWeight: "500",
   },
   profileContainer: {
     position: "relative",
