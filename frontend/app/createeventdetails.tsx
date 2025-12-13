@@ -143,6 +143,7 @@ export default function CreateEventDetailsScreen() {
         endTime: params.endTime as string,
         groups: selectedGroups,
         group: groupNames || "No groups selected",
+        isUserCreated: true, // Flag to identify user-created events
       };
 
       // Add new event to the beginning of the array

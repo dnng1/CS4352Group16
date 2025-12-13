@@ -34,6 +34,33 @@ const groupMapping: { [key: number]: { id: string; name: string } } = {
   5: { id: "5", name: "Town Travellers" },
 };
 
+// Group event IDs (from eventstorage.ts)
+const groupEventIds = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27, 28];
+const defaultEventIds = [1, 2, 3];
+
+// Check if an event can be edited (only user-created events)
+const canEditEvent = (event: any): boolean => {
+  // User-created events have isUserCreated flag
+  if (event.isUserCreated === true) {
+    return true;
+  }
+  // Default events (IDs 1-3) cannot be edited
+  if (defaultEventIds.includes(event.id)) {
+    return false;
+  }
+  // Group events (IDs 4-28) cannot be edited
+  if (groupEventIds.includes(event.id)) {
+    return false;
+  }
+  // For backward compatibility: if event ID is a timestamp (very large number), assume it's user-created
+  // Timestamps are typically > 1000000000000 (year 2001+)
+  if (typeof event.id === 'number' && event.id > 1000000000000) {
+    return true;
+  }
+  // Otherwise, don't allow editing
+  return false;
+};
+
 interface EditEventModalProps {
   visible: boolean;
   event: any;
@@ -409,6 +436,11 @@ export default function EditEventModal({ visible, event, onClose, onSave }: Edit
   };
 
   if (!visible || !event) return null;
+
+  // Prevent editing if event is not user-created
+  if (!canEditEvent(event)) {
+    return null;
+  }
 
   return (
     <Modal

@@ -18,6 +18,33 @@ const defaultEvents = [
   { event: "Friendsgiving Party", image: "https://www.mashed.com/img/gallery/52-thanksgiving-dishes-to-make-you-the-star-of-friendsgiving/intro-1637165015.jpg", date: "December 10th", startTime: "16:00", endTime: "18:00", location: "1234 ABC St. ", id: 3, group: "Welcome Wonders", description: "This is a party with food and games." }
 ];
 
+// Group event IDs (from eventstorage.ts)
+const groupEventIds = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27, 28];
+const defaultEventIds = [1, 2, 3];
+
+// Check if an event can be edited (only user-created events)
+const canEditEvent = (event: any): boolean => {
+  // User-created events have isUserCreated flag
+  if (event.isUserCreated === true) {
+    return true;
+  }
+  // Default events (IDs 1-3) cannot be edited
+  if (defaultEventIds.includes(event.id)) {
+    return false;
+  }
+  // Group events (IDs 4-28) cannot be edited
+  if (groupEventIds.includes(event.id)) {
+    return false;
+  }
+  // For backward compatibility: if event ID is a timestamp (very large number), assume it's user-created
+  // Timestamps are typically > 1000000000000 (year 2001+)
+  if (typeof event.id === 'number' && event.id > 1000000000000) {
+    return true;
+  }
+  // Otherwise, don't allow editing
+  return false;
+};
+
 const formatTime = (time: string) => {
   if (!time) return "";
   if (time.toLowerCase().includes("am") || time.toLowerCase().includes("pm")) {
@@ -469,17 +496,19 @@ export default function Dashboard() {
                   {ev.location}
                 </Text>
                 <View style={styles.cardActions}>
-                  <TouchableOpacity
-                    onPress={(e) => {
-                      e.stopPropagation();
-                      setEventToEdit(ev);
-                      setEditModalVisible(true);
-                    }}
-                    style={styles.editButton}
-                  >
-                    <Ionicons name="create-outline" size={16} color="#fff" />
-                    <Text style={styles.editButtonText}>Edit</Text>
-                  </TouchableOpacity>
+                  {canEditEvent(ev) && (
+                    <TouchableOpacity
+                      onPress={(e) => {
+                        e.stopPropagation();
+                        setEventToEdit(ev);
+                        setEditModalVisible(true);
+                      }}
+                      style={styles.editButton}
+                    >
+                      <Ionicons name="create-outline" size={16} color="#fff" />
+                      <Text style={styles.editButtonText}>Edit</Text>
+                    </TouchableOpacity>
+                  )}
                   <TouchableOpacity
                     onPress={(e) => {
                       e.stopPropagation();
@@ -522,17 +551,19 @@ export default function Dashboard() {
                     {ev.location}
                   </Text>
                   <View style={styles.cardActions}>
-                    <TouchableOpacity
-                      onPress={(e) => {
-                        e.stopPropagation();
-                        setEventToEdit(ev);
-                        setEditModalVisible(true);
-                      }}
-                      style={styles.editButton}
-                    >
-                      <Ionicons name="create-outline" size={16} color="#fff" />
-                      <Text style={styles.editButtonText}>Edit</Text>
-                    </TouchableOpacity>
+                    {canEditEvent(ev) && (
+                      <TouchableOpacity
+                        onPress={(e) => {
+                          e.stopPropagation();
+                          setEventToEdit(ev);
+                          setEditModalVisible(true);
+                        }}
+                        style={styles.editButton}
+                      >
+                        <Ionicons name="create-outline" size={16} color="#fff" />
+                        <Text style={styles.editButtonText}>Edit</Text>
+                      </TouchableOpacity>
+                    )}
                     <TouchableOpacity
                       onPress={(e) => {
                         e.stopPropagation();
