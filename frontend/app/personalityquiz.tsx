@@ -865,13 +865,13 @@ const [profileError, setProfileError] = useState("")
         </Text>
         <Text
           style={{
-            fontSize: 15,
+            fontSize: 17,
             color: COLORS.textSecondary,
             textAlign: "center",
             marginBottom: 40,
           }}
         >
-          Please upload a photo to confirm your identity <Text style={{ color: "#FF0000" }}>*</Text>
+          Please upload a photo of your government ID to confirm your identification and match you to a group <Text style={{ color: "#FF0000" }}>*</Text>
         </Text>
         <View style={{ alignItems: "center", marginBottom: 40 }}>
           <TouchableOpacity
