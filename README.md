@@ -96,7 +96,6 @@ Allows users to communicate with other members.
 Allows users to manually join groups.
 
 1. Click "join" for any group that interests you
-2. Click again if you want to unjoin a group 
 
 ### 8. Create Events Screen
 Allows users to create a custom social event.
