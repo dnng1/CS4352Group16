@@ -12,6 +12,23 @@ Mobile app for international migrants struggling to find a support system or loo
 * **Create events**: Users can create custom social events for a social group 
 * **Search**: Search on the homepage for upcoming events 
 
+## Quality Argument
+InterLink is a social platform developed for international migrants looking for low pressure ways to adapt socially. It aims to create personalized experiences through which users can maximize benefits and minimize struggles as a community. Our team has developed a clear, efficient, and user friendly app for users to engage easily and have a pleasurable experience. 
+
+VISUALIZATION
+Using a visual hierarchy system, different levels and depth of information are presented in layers. For instance, on our home page, each event has a title, location, and time on the main card for quick scanning. If the user wants to find more information, they can click on the event, which will pull a pop up that displays more details. This way, we prevent any sort of cognitive overload and make it easier for the user to read and manage information.  
+
+In addition, we have utilized a minimalist design, with few colors, simple layouts, and bubbly presentation styles. This keeps it easy to locate various levels of information while also creating a pleasing experience when moving through workflows in the app. 
+
+NAVIGATION
+Through the use of purposeful icons, symbols, labels, and buttons, we have made it easy for users to navigate through the app. Everything is self explanatory as the buttons speak for themselves and utilize color coding to help the user understand what has been processed. For instance, when the user accepts an event, the button turns green, helping confirm that the event has been updated as per the user’s request. In addition, we have made it extremely easy for users to navigate between pages. In our personality quiz, rather than having to backtrack all the way to a specific question to edit it, the user can simply click on an edit icon at the end and a back to summary icon at every question to simply jump from anywhere. This prevents overload and effort on the users side, saving time and energy by making everything quickly accessible. In addition, the app includes a help guide that walks users through the app at any point with a visual of where various features are located. 
+
+PERSONALIZATION
+Interlink reads users' personalities based on a short quiz during the registration process. Based on answers, it will process a set of groups they can join. This creates a more personalized experience as the events and people they interact with will align with their expectations and create smooth transitions into friendships. 
+
+Overall, we have designed our app in a way that simplifies work, clearly manages data, and provides a satisfying overall experience for the user. 
+
+
 ## Requirements
 * iOS mobile device or Android 
 * Expo Go (download from Play Store or App Store)
