@@ -120,8 +120,7 @@ Allows users to create a custom social event.
 6. Added popup to confirm event as added
 
 ## Demonstration
-* Video Link: https://www.youtube.com/shorts/72CBEaOlbK0
-
+* Video Link: https://youtube.com/shorts/MXUzh7TycHA
 ## Limitations
 * We don't have a backend or database for user IDs and passwords, events, and groups. Everything is currently hardcoded
 * Since we hardcoded groups, we have a limited number of groups displayed for users to join 
